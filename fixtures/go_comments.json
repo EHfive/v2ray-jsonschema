@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/invopop/jsonschema/examples/user",
+  "$ref": "#/$defs/User",
+  "$defs": {
+    "Pet": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name",
+          "description": "Name of the animal."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "description": "Pet defines the user's fury friend."
+    },
+    "Plant": {
+      "properties": {
+        "variant": {
+          "type": "string",
+          "title": "Variant"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "variant"
+      ],
+      "description": "Plant represents the plants the user might have and serves as a test of structs inside a `type` set."
+    },
+    "User": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique sequential identifier."
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20,
+          "minLength": 1,
+          "pattern": ".*",
+          "title": "the name",
+          "description": "this is a property",
+          "default": "alex",
+          "examples": [
+            "joe",
+            "lucy"
+          ]
+        },
+        "friends": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array",
+          "description": "list of IDs, omitted when empty"
+        },
+        "tags": {
+          "type": "object"
+        },
+        "pets": {
+          "items": {
+            "$ref": "#/$defs/Pet"
+          },
+          "type": "array",
+          "description": "An array of pets the user cares for."
+        },
+        "plants": {
+          "items": {
+            "$ref": "#/$defs/Plant"
+          },
+          "type": "array",
+          "title": "Pants",
+          "description": "Set of plants that the user likes"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "pets",
+        "plants"
+      ],
+      "description": "User is used as a base to provide tests for comments."
+    }
+  }
+}
