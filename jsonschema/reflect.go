@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/iancoleman/orderedmap"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 // Version is the JSON Schema version.
@@ -304,7 +305,7 @@ var rawMessageType = reflect.TypeOf(json.RawMessage{})
 
 // Go code generated from protobuf enum types should fulfil this interface.
 type protoEnum interface {
-	EnumDescriptor() ([]byte, []int)
+	Descriptor() protoreflect.EnumDescriptor
 }
 
 var protoEnumType = reflect.TypeOf((*protoEnum)(nil)).Elem()
@@ -366,10 +367,16 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 	// jsonpb will marshal protobuf enum options as either strings or integers.
 	// It will unmarshal either.
 	if t.Implements(protoEnumType) {
-		return &Schema{OneOf: []*Schema{
-			{Type: "string"},
-			{Type: "integer"},
-		}}
+		enumValues := reflect.New(t).Interface().(protoEnum).Descriptor().Values()
+		s := &Schema{}
+
+		for i := 0; i < enumValues.Len(); i++ {
+			value := enumValues.Get(i)
+			s.Enum = append(s.Enum, value.Name())
+			s.Enum = append(s.Enum, value.Number())
+		}
+
+		return s
 	}
 
 	// Defined format types for JSON Schema Validation
