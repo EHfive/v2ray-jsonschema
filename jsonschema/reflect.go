@@ -108,7 +108,12 @@ type customSchemaImpl interface {
 	JSONSchema() *Schema
 }
 
+type customSchema2Impl interface {
+	JSONSchema2(*Reflector, Definitions) *Schema
+}
+
 var customType = reflect.TypeOf((*customSchemaImpl)(nil)).Elem()
+var customType2 = reflect.TypeOf((*customSchema2Impl)(nil)).Elem()
 
 // customSchemaGetFieldDocString
 type customSchemaGetFieldDocString interface {
@@ -209,6 +214,8 @@ type Reflector struct {
 	// If a json or yaml tag is present, KeyNamer will receive the tag's name as an argument, not the original key name.
 	KeyNamer func(string) string
 
+	CustomFields func(reflect.Type) []reflect.StructField
+
 	// AdditionalFields allows adding structfields for a given type
 	AdditionalFields func(reflect.Type) []reflect.StructField
 
@@ -308,6 +315,10 @@ func (r *Reflector) SetBaseSchemaID(id string) {
 	r.BaseSchemaID = ID(id)
 }
 
+func (r *Reflector) RefOrReflectTypeToSchema(definitions Definitions, t reflect.Type) *Schema {
+	return r.refOrReflectTypeToSchema(definitions, t)
+}
+
 func (r *Reflector) refOrReflectTypeToSchema(definitions Definitions, t reflect.Type) *Schema {
 	id := r.lookupID(t)
 	if id != EmptyID {
@@ -335,6 +346,10 @@ func (r *Reflector) reflectTypeToSchemaWithID(defs Definitions, t reflect.Type) 
 		}
 	}
 	return s
+}
+
+func (r *Reflector) ReflectTypeToSchema(definitions Definitions, t reflect.Type) *Schema {
+	return r.reflectTypeToSchema(definitions, t)
 }
 
 func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type) *Schema {
@@ -450,7 +465,17 @@ func (r *Reflector) reflectCustomSchema(definitions Definitions, t reflect.Type)
 		return r.reflectCustomSchema(definitions, t.Elem())
 	}
 
-	if t.Implements(customType) {
+	if t.Implements(customType2) {
+		v := reflect.New(t)
+		o := v.Interface().(customSchema2Impl)
+		st := o.JSONSchema2(r, definitions)
+		r.addDefinition(definitions, t, st)
+		if r.DoNotReference {
+			return st
+		} else {
+			return r.refDefinition(definitions, t)
+		}
+	} else if t.Implements(customType) {
 		v := reflect.New(t)
 		o := v.Interface().(customSchemaImpl)
 		st := o.JSONSchema()
@@ -552,10 +577,22 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 		}
 	}
 
-	for i := 0; i < t.NumField(); i++ {
-		f := t.Field(i)
-		handleField(f)
+	var customFields []reflect.StructField
+	if r.CustomFields != nil {
+		customFields = r.CustomFields(t)
 	}
+
+	if customFields != nil {
+		for _, f := range customFields {
+			handleField(f)
+		}
+	} else {
+		for i := 0; i < t.NumField(); i++ {
+			f := t.Field(i)
+			handleField(f)
+		}
+	}
+
 	if r.AdditionalFields != nil {
 		if af := r.AdditionalFields(t); af != nil {
 			for _, sf := range af {
