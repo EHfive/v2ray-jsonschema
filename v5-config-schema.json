@@ -6,347 +6,7 @@
     "github:EHfive_v2ray-jsonschema_v5config:CustomInboundConfig": {
       "allOf": [
         {
-          "properties": {
-            "port": {
-              "properties": {
-                "from": {
-                  "type": "integer"
-                },
-                "to": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "listen": {
-              "properties": {},
-              "type": "object"
-            },
-            "tag": {
-              "type": "string"
-            },
-            "sniffing": {
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                },
-                "destOverride": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "metadataOnly": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "streamSettings": {
-              "allOf": [
-                {
-                  "properties": {
-                    "socketSettings": {
-                      "properties": {
-                        "mark": {
-                          "type": "integer"
-                        },
-                        "tcpFastOpen": {
-                          "type": "boolean"
-                        },
-                        "tproxy": {
-                          "type": "string"
-                        },
-                        "acceptProxyProtocol": {
-                          "type": "boolean"
-                        },
-                        "tcpKeepAliveInterval": {
-                          "type": "integer"
-                        },
-                        "tcpKeepAliveIdle": {
-                          "type": "integer"
-                        },
-                        "tcpFastOpenQueueLength": {
-                          "type": "integer"
-                        },
-                        "bindToDevice": {
-                          "type": "string"
-                        },
-                        "rxBufSize": {
-                          "type": "integer"
-                        },
-                        "txBufSize": {
-                          "type": "integer"
-                        },
-                        "forceBufSize": {
-                          "type": "boolean"
-                        }
-                      },
-                      "type": "object"
-                    }
-                  },
-                  "additionalProperties": true,
-                  "type": "object"
-                },
-                {
-                  "oneOf": [
-                    {
-                      "properties": {
-                        "transport": {
-                          "const": "grpc"
-                        },
-                        "transportSettings": {
-                          "properties": {
-                            "host": {
-                              "type": "string"
-                            },
-                            "serviceName": {
-                              "type": "string"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    },
-                    {
-                      "properties": {
-                        "transport": {
-                          "const": "kcp"
-                        },
-                        "transportSettings": {
-                          "properties": {
-                            "mtu": {
-                              "properties": {
-                                "value": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "tti": {
-                              "properties": {
-                                "value": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "uplinkCapacity": {
-                              "properties": {
-                                "value": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "downlinkCapacity": {
-                              "properties": {
-                                "value": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "congestion": {
-                              "type": "boolean"
-                            },
-                            "writeBuffer": {
-                              "properties": {
-                                "size": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "readBuffer": {
-                              "properties": {
-                                "size": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "headerConfig": {
-                              "properties": {
-                                "typeUrl": {
-                                  "type": "string"
-                                },
-                                "value": {
-                                  "type": "string",
-                                  "contentEncoding": "base64"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "seed": {
-                              "properties": {
-                                "seed": {
-                                  "type": "string"
-                                }
-                              },
-                              "type": "object"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    },
-                    {
-                      "properties": {
-                        "transport": {
-                          "const": "tcp"
-                        },
-                        "transportSettings": {
-                          "properties": {
-                            "headerSettings": {
-                              "properties": {
-                                "typeUrl": {
-                                  "type": "string"
-                                },
-                                "value": {
-                                  "type": "string",
-                                  "contentEncoding": "base64"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "acceptProxyProtocol": {
-                              "type": "boolean"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    },
-                    {
-                      "properties": {
-                        "transport": {
-                          "const": "ws"
-                        },
-                        "transportSettings": {
-                          "properties": {
-                            "path": {
-                              "type": "string"
-                            },
-                            "header": {
-                              "items": {
-                                "properties": {
-                                  "key": {
-                                    "type": "string"
-                                  },
-                                  "value": {
-                                    "type": "string"
-                                  }
-                                },
-                                "type": "object"
-                              },
-                              "type": "array"
-                            },
-                            "acceptProxyProtocol": {
-                              "type": "boolean"
-                            },
-                            "maxEarlyData": {
-                              "type": "integer"
-                            },
-                            "useBrowserForwarding": {
-                              "type": "boolean"
-                            },
-                            "earlyDataHeaderName": {
-                              "type": "string"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    }
-                  ]
-                },
-                {
-                  "oneOf": [
-                    {
-                      "properties": {
-                        "security": {
-                          "const": "tls"
-                        },
-                        "securitySettings": {
-                          "properties": {
-                            "allowInsecure": {
-                              "type": "boolean"
-                            },
-                            "certificate": {
-                              "items": {
-                                "properties": {
-                                  "certificate": {
-                                    "type": "string",
-                                    "contentEncoding": "base64"
-                                  },
-                                  "key": {
-                                    "type": "string",
-                                    "contentEncoding": "base64"
-                                  },
-                                  "usage": {
-                                    "oneOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "integer"
-                                      }
-                                    ]
-                                  },
-                                  "certificateFile": {
-                                    "type": "string"
-                                  },
-                                  "keyFile": {
-                                    "type": "string"
-                                  }
-                                },
-                                "type": "object"
-                              },
-                              "type": "array"
-                            },
-                            "serverName": {
-                              "type": "string"
-                            },
-                            "nextProtocol": {
-                              "items": {
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "enableSessionResumption": {
-                              "type": "boolean"
-                            },
-                            "disableSystemRoot": {
-                              "type": "boolean"
-                            },
-                            "pinnedPeerCertificateChainSha256": {
-                              "items": {
-                                "type": "string",
-                                "contentEncoding": "base64"
-                              },
-                              "type": "array"
-                            },
-                            "verifyClientCertificate": {
-                              "type": "boolean"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    }
-                  ]
-                }
-              ]
-            }
-          },
-          "additionalProperties": true,
-          "type": "object"
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:InboundConfig"
         },
         {
           "oneOf": [
@@ -445,341 +105,7 @@
     "github:EHfive_v2ray-jsonschema_v5config:CustomOutboundConfig": {
       "allOf": [
         {
-          "properties": {
-            "sendThrough": {
-              "properties": {},
-              "type": "object"
-            },
-            "tag": {
-              "type": "string"
-            },
-            "streamSettings": {
-              "allOf": [
-                {
-                  "properties": {
-                    "socketSettings": {
-                      "properties": {
-                        "mark": {
-                          "type": "integer"
-                        },
-                        "tcpFastOpen": {
-                          "type": "boolean"
-                        },
-                        "tproxy": {
-                          "type": "string"
-                        },
-                        "acceptProxyProtocol": {
-                          "type": "boolean"
-                        },
-                        "tcpKeepAliveInterval": {
-                          "type": "integer"
-                        },
-                        "tcpKeepAliveIdle": {
-                          "type": "integer"
-                        },
-                        "tcpFastOpenQueueLength": {
-                          "type": "integer"
-                        },
-                        "bindToDevice": {
-                          "type": "string"
-                        },
-                        "rxBufSize": {
-                          "type": "integer"
-                        },
-                        "txBufSize": {
-                          "type": "integer"
-                        },
-                        "forceBufSize": {
-                          "type": "boolean"
-                        }
-                      },
-                      "type": "object"
-                    }
-                  },
-                  "additionalProperties": true,
-                  "type": "object"
-                },
-                {
-                  "oneOf": [
-                    {
-                      "properties": {
-                        "transport": {
-                          "const": "grpc"
-                        },
-                        "transportSettings": {
-                          "properties": {
-                            "host": {
-                              "type": "string"
-                            },
-                            "serviceName": {
-                              "type": "string"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    },
-                    {
-                      "properties": {
-                        "transport": {
-                          "const": "kcp"
-                        },
-                        "transportSettings": {
-                          "properties": {
-                            "mtu": {
-                              "properties": {
-                                "value": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "tti": {
-                              "properties": {
-                                "value": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "uplinkCapacity": {
-                              "properties": {
-                                "value": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "downlinkCapacity": {
-                              "properties": {
-                                "value": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "congestion": {
-                              "type": "boolean"
-                            },
-                            "writeBuffer": {
-                              "properties": {
-                                "size": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "readBuffer": {
-                              "properties": {
-                                "size": {
-                                  "type": "integer"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "headerConfig": {
-                              "properties": {
-                                "typeUrl": {
-                                  "type": "string"
-                                },
-                                "value": {
-                                  "type": "string",
-                                  "contentEncoding": "base64"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "seed": {
-                              "properties": {
-                                "seed": {
-                                  "type": "string"
-                                }
-                              },
-                              "type": "object"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    },
-                    {
-                      "properties": {
-                        "transport": {
-                          "const": "tcp"
-                        },
-                        "transportSettings": {
-                          "properties": {
-                            "headerSettings": {
-                              "properties": {
-                                "typeUrl": {
-                                  "type": "string"
-                                },
-                                "value": {
-                                  "type": "string",
-                                  "contentEncoding": "base64"
-                                }
-                              },
-                              "type": "object"
-                            },
-                            "acceptProxyProtocol": {
-                              "type": "boolean"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    },
-                    {
-                      "properties": {
-                        "transport": {
-                          "const": "ws"
-                        },
-                        "transportSettings": {
-                          "properties": {
-                            "path": {
-                              "type": "string"
-                            },
-                            "header": {
-                              "items": {
-                                "properties": {
-                                  "key": {
-                                    "type": "string"
-                                  },
-                                  "value": {
-                                    "type": "string"
-                                  }
-                                },
-                                "type": "object"
-                              },
-                              "type": "array"
-                            },
-                            "acceptProxyProtocol": {
-                              "type": "boolean"
-                            },
-                            "maxEarlyData": {
-                              "type": "integer"
-                            },
-                            "useBrowserForwarding": {
-                              "type": "boolean"
-                            },
-                            "earlyDataHeaderName": {
-                              "type": "string"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    }
-                  ]
-                },
-                {
-                  "oneOf": [
-                    {
-                      "properties": {
-                        "security": {
-                          "const": "tls"
-                        },
-                        "securitySettings": {
-                          "properties": {
-                            "allowInsecure": {
-                              "type": "boolean"
-                            },
-                            "certificate": {
-                              "items": {
-                                "properties": {
-                                  "certificate": {
-                                    "type": "string",
-                                    "contentEncoding": "base64"
-                                  },
-                                  "key": {
-                                    "type": "string",
-                                    "contentEncoding": "base64"
-                                  },
-                                  "usage": {
-                                    "oneOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "integer"
-                                      }
-                                    ]
-                                  },
-                                  "certificateFile": {
-                                    "type": "string"
-                                  },
-                                  "keyFile": {
-                                    "type": "string"
-                                  }
-                                },
-                                "type": "object"
-                              },
-                              "type": "array"
-                            },
-                            "serverName": {
-                              "type": "string"
-                            },
-                            "nextProtocol": {
-                              "items": {
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "enableSessionResumption": {
-                              "type": "boolean"
-                            },
-                            "disableSystemRoot": {
-                              "type": "boolean"
-                            },
-                            "pinnedPeerCertificateChainSha256": {
-                              "items": {
-                                "type": "string",
-                                "contentEncoding": "base64"
-                              },
-                              "type": "array"
-                            },
-                            "verifyClientCertificate": {
-                              "type": "boolean"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      },
-                      "additionalProperties": true
-                    }
-                  ]
-                }
-              ]
-            },
-            "proxySettings": {
-              "properties": {
-                "tag": {
-                  "type": "string"
-                },
-                "transportLayer": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "mux": {
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                },
-                "concurrency": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "additionalProperties": true,
-          "type": "object"
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:OutboundConfig"
         },
         {
           "oneOf": [
@@ -927,6 +253,76 @@
         }
       },
       "type": "object"
+    },
+    "github:EHfive_v2ray-jsonschema_v5config:CustomStreamSettings": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:StreamConfig"
+        },
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "transport": {
+                  "const": "grpc"
+                },
+                "transportSettings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_grpc:Config"
+                }
+              },
+              "additionalProperties": true
+            },
+            {
+              "properties": {
+                "transport": {
+                  "const": "kcp"
+                },
+                "transportSettings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:Config"
+                }
+              },
+              "additionalProperties": true
+            },
+            {
+              "properties": {
+                "transport": {
+                  "const": "tcp"
+                },
+                "transportSettings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_tcp:Config"
+                }
+              },
+              "additionalProperties": true
+            },
+            {
+              "properties": {
+                "transport": {
+                  "const": "ws"
+                },
+                "transportSettings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_websocket:Config"
+                }
+              },
+              "additionalProperties": true
+            }
+          ]
+        },
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "security": {
+                  "const": "tls"
+                },
+                "securitySettings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_tls:Config"
+                }
+              },
+              "additionalProperties": true
+            }
+          ]
+        }
+      ]
     },
     "github:v2fly_v2ray-core_v5_app_browserforwarder:Config": {
       "properties": {
@@ -1502,6 +898,140 @@
       },
       "type": "object"
     },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon:Address": {
+      "properties": {},
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon:PortRange": {
+      "properties": {
+        "from": {
+          "type": "integer"
+        },
+        "to": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "concurrency": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_proxycfg:ProxyConfig": {
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "transportLayer": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_sniffer:SniffingConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "destOverride": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "metadataOnly": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_socketcfg:SocketConfig": {
+      "properties": {
+        "mark": {
+          "type": "integer"
+        },
+        "tcpFastOpen": {
+          "type": "boolean"
+        },
+        "tproxy": {
+          "type": "string"
+        },
+        "acceptProxyProtocol": {
+          "type": "boolean"
+        },
+        "tcpKeepAliveInterval": {
+          "type": "integer"
+        },
+        "tcpKeepAliveIdle": {
+          "type": "integer"
+        },
+        "tcpFastOpenQueueLength": {
+          "type": "integer"
+        },
+        "bindToDevice": {
+          "type": "string"
+        },
+        "rxBufSize": {
+          "type": "integer"
+        },
+        "txBufSize": {
+          "type": "integer"
+        },
+        "forceBufSize": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v5cfg:InboundConfig": {
+      "properties": {
+        "port": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon:PortRange"
+        },
+        "listen": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon:Address"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "sniffing": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_sniffer:SniffingConfig"
+        },
+        "streamSettings": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v5config:CustomStreamSettings"
+        }
+      },
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v5cfg:OutboundConfig": {
+      "properties": {
+        "sendThrough": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon:Address"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "streamSettings": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v5config:CustomStreamSettings"
+        },
+        "proxySettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_proxycfg:ProxyConfig"
+        },
+        "mux": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig"
+        }
+      },
+      "additionalProperties": true,
+      "type": "object"
+    },
     "github:v2fly_v2ray-core_v5_infra_conf_v5cfg:RootConfig": {
       "properties": {
         "log": {
@@ -1533,6 +1063,15 @@
           "type": "array"
         }
       },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v5cfg:StreamConfig": {
+      "properties": {
+        "socketSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_socketcfg:SocketConfig"
+        }
+      },
+      "additionalProperties": true,
       "type": "object"
     },
     "github:v2fly_v2ray-core_v5_proxy_blackhole:SimplifiedConfig": {
@@ -1785,6 +1324,221 @@
           "type": "integer"
         },
         "uuid": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_grpc:Config": {
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "serviceName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_kcp:Config": {
+      "properties": {
+        "mtu": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:MTU"
+        },
+        "tti": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:TTI"
+        },
+        "uplinkCapacity": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:UplinkCapacity"
+        },
+        "downlinkCapacity": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:DownlinkCapacity"
+        },
+        "congestion": {
+          "type": "boolean"
+        },
+        "writeBuffer": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:WriteBuffer"
+        },
+        "readBuffer": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:ReadBuffer"
+        },
+        "headerConfig": {
+          "$ref": "#/$defs/google.golang.org_protobuf_types_known_anypb:Any"
+        },
+        "seed": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:EncryptionSeed"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_kcp:DownlinkCapacity": {
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_kcp:EncryptionSeed": {
+      "properties": {
+        "seed": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_kcp:MTU": {
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_kcp:ReadBuffer": {
+      "properties": {
+        "size": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_kcp:TTI": {
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_kcp:UplinkCapacity": {
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_kcp:WriteBuffer": {
+      "properties": {
+        "size": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_tcp:Config": {
+      "properties": {
+        "headerSettings": {
+          "$ref": "#/$defs/google.golang.org_protobuf_types_known_anypb:Any"
+        },
+        "acceptProxyProtocol": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_tls:Certificate": {
+      "properties": {
+        "certificate": {
+          "type": "string",
+          "contentEncoding": "base64"
+        },
+        "key": {
+          "type": "string",
+          "contentEncoding": "base64"
+        },
+        "usage": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "certificateFile": {
+          "type": "string"
+        },
+        "keyFile": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_tls:Config": {
+      "properties": {
+        "allowInsecure": {
+          "type": "boolean"
+        },
+        "certificate": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_tls:Certificate"
+          },
+          "type": "array"
+        },
+        "serverName": {
+          "type": "string"
+        },
+        "nextProtocol": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "enableSessionResumption": {
+          "type": "boolean"
+        },
+        "disableSystemRoot": {
+          "type": "boolean"
+        },
+        "pinnedPeerCertificateChainSha256": {
+          "items": {
+            "type": "string",
+            "contentEncoding": "base64"
+          },
+          "type": "array"
+        },
+        "verifyClientCertificate": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_websocket:Config": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_websocket:Header"
+          },
+          "type": "array"
+        },
+        "acceptProxyProtocol": {
+          "type": "boolean"
+        },
+        "maxEarlyData": {
+          "type": "integer"
+        },
+        "useBrowserForwarding": {
+          "type": "boolean"
+        },
+        "earlyDataHeaderName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_websocket:Header": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
           "type": "string"
         }
       },

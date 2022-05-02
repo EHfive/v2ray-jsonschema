@@ -2,6 +2,7 @@ package v5config
 
 import (
 	"reflect"
+	"strings"
 
 	C "github.com/EHfive/v2ray-jsonschema/common"
 	"github.com/iancoleman/orderedmap"
@@ -47,7 +48,7 @@ func (CustomOutboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 }
 
 func (CustomStreamSettings) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	basic := buildBasicObjectSchema(r, C.ToElemType((*v5cfg.StreamConfig)(nil)), []string{
+	basic := buildBasicObjectSchema(r, d, C.ToElemType((*v5cfg.StreamConfig)(nil)), []string{
 		"transport",
 		"transportSettings",
 		"security",
@@ -94,15 +95,19 @@ func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema 
 	}
 }
 
-func buildBasicObjectSchema(r *JS.Reflector, t reflect.Type, excludes []string) *JS.Schema {
-	rNoRef := *r
-	rNoRef.DoNotReference = true
-	s := rNoRef.ReflectTypeToSchema(JS.Definitions{}, t)
+func buildBasicObjectSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, excludes []string) *JS.Schema {
+	s := r.RefOrReflectTypeToSchema(d, t)
+	res := s
+	if s.Ref != "" {
+		// s = d[s.Ref]
+		defName := strings.Replace(s.Ref, "#/$defs/", "", 1)
+		s = d[defName]
+	}
 	for _, name := range excludes {
 		s.Properties.Delete(name)
 	}
 	s.AdditionalProperties = JS.TrueSchema
-	return s
+	return res
 }
 
 func buildOneOfConfigsSchema(r *JS.Reflector, d JS.Definitions, idKey string, configKey string, interfaceType string, shortNames []string) *JS.Schema {
@@ -125,7 +130,7 @@ func buildOneOfConfigsSchema(r *JS.Reflector, d JS.Definitions, idKey string, co
 func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, interfaceType string, protocols []string) *JS.Schema {
 	return &JS.Schema{
 		AllOf: []*JS.Schema{
-			buildBasicObjectSchema(r, t, []string{"protocol", "settings"}),
+			buildBasicObjectSchema(r, d, t, []string{"protocol", "settings"}),
 			buildOneOfConfigsSchema(r, d, "protocol", "settings", interfaceType, protocols),
 		},
 	}
