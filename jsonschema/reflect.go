@@ -310,6 +310,8 @@ type protoEnum interface {
 
 var protoEnumType = reflect.TypeOf((*protoEnum)(nil)).Elem()
 
+var protoMessageType = reflect.TypeOf((*protoreflect.ProtoMessage)(nil)).Elem()
+
 // SetBaseSchemaID is a helper use to be able to set the reflectors base
 // schema ID from a string as opposed to then ID instance.
 func (r *Reflector) SetBaseSchemaID(id string) {
@@ -548,6 +550,11 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 	}
 
 	handleField := func(f reflect.StructField) {
+		handled := r.reflectFieldPbOneOf(st, definitions, t, f)
+		if handled {
+			return
+		}
+
 		name, shouldEmbed, required, nullable := r.reflectFieldName(f)
 		// if anonymous and exported type should be processed recursively
 		// current type should inherit properties of anonymous one
@@ -607,6 +614,31 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 			}
 		}
 	}
+}
+
+func (r *Reflector) reflectFieldPbOneOf(st *Schema, definitions Definitions, t reflect.Type, f reflect.StructField) bool {
+	tag, exist := f.Tag.Lookup("protobuf_oneof")
+	if !exist && !t.Implements(protoMessageType) {
+		return false
+	}
+
+	oneofs := reflect.New(t).Interface().(protoreflect.ProtoMessage).ProtoReflect().Descriptor().Oneofs()
+	oneof := oneofs.ByName(protoreflect.Name(tag))
+	if oneof == nil {
+		return false
+	}
+
+	fields := oneof.Fields()
+	for i := 0; i < fields.Len(); i++ {
+		field := fields.Get(i)
+		name := string(field.Name())
+		fieldType := reflect.TypeOf(field.Default().Interface())
+		st.Properties.Set(name, r.refOrReflectTypeToSchema(definitions, fieldType))
+		st.OneOf = append(st.OneOf, &Schema{
+			Required: []string{name},
+		})
+	}
+	return true
 }
 
 func (r *Reflector) lookupComment(t reflect.Type, name string) string {
