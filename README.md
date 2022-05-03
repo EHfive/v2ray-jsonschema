@@ -11,8 +11,8 @@ Build JSON schemas of V2Ray v4, v5 json config format through Go type reflection
 Set property `$schema` to URL of corresponding format of JSON schema in V2Ray config file.
 VSCode is known to support this format, [see also](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings).
 
-- jsonv4 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v4-config-schema.json
-- jsonv5 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config-schema.json
+- jsonv4 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v4-config.schema.json
+- jsonv5 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json
 
 - jsonv4 schema (jsDelivr CDN): https://cdn.jsdelivr.net/gh/EHfive/v2ray-jsonschema/v4-config.schema.json
 - jsonv5 schema (jsDelivr CDN): https://cdn.jsdelivr.net/gh/EHfive/v2ray-jsonschema/v5-config.schema.json
