@@ -1,0 +1,1854 @@
+{
+  "$schema": "http://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/v2fly/v2ray-core/v5/infra/conf/v4/github:v2fly_v2ray-core_v5_infra_conf_v4:-config",
+  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Config",
+  "$defs": {
+    "github:EHfive_v2ray-jsonschema_common:CustomPortRange": {
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "properties": {
+            "from": {
+              "type": "integer"
+            },
+            "to": {
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_common:CustomString": {
+      "type": "string"
+    },
+    "github:EHfive_v2ray-jsonschema_common:CustomStringList": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomFakeDNSConfig": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:FakeDNSPoolElementConfig"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:FakeDNSPoolElementConfig"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomHostAddress": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+          },
+          "type": "array"
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomInboundConfig": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourConfig"
+        },
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "protocol": {
+                  "const": "dokodemo-door"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:DokodemoConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "http"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPServerConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "shadowsocks"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:ShadowsocksServerConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "socks"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:SocksServerConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "vless"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VLessInboundConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "vmess"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VMessInboundConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "trojan"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanServerConfig"
+                }
+              },
+              "type": "object"
+            }
+          ]
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomKCPHeaderConfig": {
+      "properties": {
+        "type": {
+          "enum": [
+            "none",
+            "srtp",
+            "utp",
+            "wechat-video",
+            "dtls",
+            "wireguard"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomMultiObservatoryItem": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:MultiObservatoryItem"
+        },
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "type": {
+                  "const": "burst"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:BurstObservatoryConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "type": {
+                  "const": "default"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:ObservatoryConfig"
+                }
+              },
+              "type": "object"
+            }
+          ]
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomOutboundConfig": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:OutboundDetourConfig"
+        },
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "protocol": {
+                  "const": "blackhole"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:BlackholeConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "freedom"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:FreedomConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "http"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPClientConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "shadowsocks"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:ShadowsocksClientConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "socks"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:SocksClientConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "vless"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VLessOutboundConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "vmess"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VMessOutboundConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "trojan"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanClientConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "dns"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:DNSOutboundConfig"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "properties": {
+                "protocol": {
+                  "const": "loopback"
+                },
+                "settings": {
+                  "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:LoopbackConfig"
+                }
+              },
+              "type": "object"
+            }
+          ]
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomRouterRule": {
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "outboundTag": {
+          "type": "string"
+        },
+        "balancerTag": {
+          "type": "string"
+        },
+        "domainMatcher": {
+          "type": "string"
+        },
+        "domain": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "domains": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "ip": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "port": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "network": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "source": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "sourcePort": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "user": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "inboundTag": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "protocol": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "attrs": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomStrategyConfig": {
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "random"
+            },
+            "settings": {
+              "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyRandomConfig"
+            }
+          },
+          "type": "object"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "leastping"
+            },
+            "settings": {
+              "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyLeastPingConfig"
+            }
+          },
+          "type": "object"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "leastload"
+            },
+            "settings": {
+              "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyLeastLoadConfig"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomTCPHeaderConfig": {
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "none"
+            }
+          },
+          "type": "object"
+        },
+        {
+          "allOf": [
+            {
+              "properties": {
+                "type": {
+                  "const": "http"
+                }
+              },
+              "type": "object"
+            },
+            {
+              "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Authenticator"
+            }
+          ]
+        }
+      ]
+    },
+    "github:v2fly_v2ray-core_v5_app_router:StrategyLeastLoadConfig": {
+      "properties": {
+        "costs": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyWeight"
+          },
+          "type": "array"
+        },
+        "baselines": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "expected": {
+          "type": "integer"
+        },
+        "maxRtt": {
+          "type": "integer"
+        },
+        "tolerance": {
+          "type": "number"
+        },
+        "observerTag": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_app_router:StrategyLeastPingConfig": {
+      "properties": {
+        "observerTag": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_app_router:StrategyRandomConfig": {
+      "properties": {},
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_app_router:StrategyWeight": {
+      "properties": {
+        "regexp": {
+          "type": "boolean"
+        },
+        "match": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "concurrency": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_proxycfg:ProxyConfig": {
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "transportLayer": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_sniffer:SniffingConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "destOverride": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "metadataOnly": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_socketcfg:SocketConfig": {
+      "properties": {
+        "mark": {
+          "type": "integer"
+        },
+        "tcpFastOpen": {
+          "type": "boolean"
+        },
+        "tproxy": {
+          "type": "string"
+        },
+        "acceptProxyProtocol": {
+          "type": "boolean"
+        },
+        "tcpKeepAliveInterval": {
+          "type": "integer"
+        },
+        "tcpKeepAliveIdle": {
+          "type": "integer"
+        },
+        "tcpFastOpenQueueLength": {
+          "type": "integer"
+        },
+        "bindToDevice": {
+          "type": "string"
+        },
+        "rxBufSize": {
+          "type": "integer"
+        },
+        "txBufSize": {
+          "type": "integer"
+        },
+        "forceBufSize": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_tlscfg:TLSCertConfig": {
+      "properties": {
+        "certificateFile": {
+          "type": "string"
+        },
+        "certificate": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "keyFile": {
+          "type": "string"
+        },
+        "key": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "usage": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_tlscfg:TLSConfig": {
+      "properties": {
+        "allowInsecure": {
+          "type": "boolean"
+        },
+        "certificates": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_tlscfg:TLSCertConfig"
+          },
+          "type": "array"
+        },
+        "serverName": {
+          "type": "string"
+        },
+        "alpn": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "enableSessionResumption": {
+          "type": "boolean"
+        },
+        "disableSystemRoot": {
+          "type": "boolean"
+        },
+        "pinnedPeerCertificateChainSha256": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "verifyClientCertificate": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:DNSConfig": {
+      "properties": {
+        "servers": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:NameServerConfig"
+          },
+          "type": "array"
+        },
+        "hosts": {
+          "patternProperties": {
+            ".*": {
+              "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomHostAddress"
+            }
+          },
+          "type": "object"
+        },
+        "clientIp": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "queryStrategy": {
+          "type": "string"
+        },
+        "disableCache": {
+          "type": "boolean"
+        },
+        "disableFallback": {
+          "type": "boolean"
+        },
+        "disableFallbackIfMatch": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:NameServerConfig": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "clientIp": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "skipFallback": {
+          "type": "boolean"
+        },
+        "domains": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "expectIps": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_synthetic_log:LogConfig": {
+      "properties": {
+        "access": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "loglevel": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:BalancingRule": {
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "selector": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "strategy": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomStrategyConfig"
+        },
+        "fallbackTag": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:HealthCheckSettings": {
+      "properties": {
+        "destination": {
+          "type": "string"
+        },
+        "connectivity": {
+          "type": "string"
+        },
+        "interval": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "sampling": {
+          "type": "integer"
+        },
+        "timeout": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:RouterConfig": {
+      "properties": {
+        "settings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:RouterRulesConfig"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomRouterRule"
+          },
+          "type": "array"
+        },
+        "domainStrategy": {
+          "type": "string"
+        },
+        "balancers": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:BalancingRule"
+          },
+          "type": "array"
+        },
+        "domainMatcher": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:RouterRulesConfig": {
+      "properties": {
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomRouterRule"
+          },
+          "type": "array"
+        },
+        "domainStrategy": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:APIConfig": {
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "services": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:Authenticator": {
+      "properties": {
+        "request": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:AuthenticatorRequest"
+        },
+        "response": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:AuthenticatorResponse"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:AuthenticatorRequest": {
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "headers": {
+          "patternProperties": {
+            ".*": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:AuthenticatorResponse": {
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "headers": {
+          "patternProperties": {
+            ".*": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:BlackholeConfig": {
+      "properties": {
+        "response": true
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:BridgeConfig": {
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:BrowserForwarderConfig": {
+      "properties": {
+        "listenAddr": {
+          "type": "string"
+        },
+        "listenPort": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:BurstObservatoryConfig": {
+      "properties": {
+        "subjectSelector": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "pingConfig": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:HealthCheckSettings"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:Config": {
+      "properties": {
+        "port": {
+          "type": "integer"
+        },
+        "inbound": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourConfig"
+        },
+        "outbound": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:OutboundDetourConfig"
+        },
+        "inboundDetour": {
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomInboundConfig"
+          },
+          "type": "array"
+        },
+        "outboundDetour": {
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomOutboundConfig"
+          },
+          "type": "array"
+        },
+        "log": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_log:LogConfig"
+        },
+        "routing": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:RouterConfig"
+        },
+        "dns": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:DNSConfig"
+        },
+        "inbounds": {
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomInboundConfig"
+          },
+          "type": "array"
+        },
+        "outbounds": {
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomOutboundConfig"
+          },
+          "type": "array"
+        },
+        "transport": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:TransportConfig"
+        },
+        "policy": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:PolicyConfig"
+        },
+        "api": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:APIConfig"
+        },
+        "stats": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:StatsConfig"
+        },
+        "reverse": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:ReverseConfig"
+        },
+        "fakeDns": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFakeDNSConfig"
+        },
+        "browserForwarder": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:BrowserForwarderConfig"
+        },
+        "observatory": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:ObservatoryConfig"
+        },
+        "burstObservatory": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:BurstObservatoryConfig"
+        },
+        "multiObservatory": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:MultiObservatoryConfig"
+        },
+        "services": {
+          "patternProperties": {
+            ".*": true
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:DNSOutboundConfig": {
+      "properties": {
+        "network": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "userLevel": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:DokodemoConfig": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "network": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "timeout": {
+          "type": "integer"
+        },
+        "followRedirect": {
+          "type": "boolean"
+        },
+        "userLevel": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:DomainSocketConfig": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "abstract": {
+          "type": "boolean"
+        },
+        "padding": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:FakeDNSPoolElementConfig": {
+      "properties": {
+        "ipPool": {
+          "type": "string"
+        },
+        "poolSize": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:FeaturesConfig": {
+      "properties": {
+        "detour": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VMessDetourConfig"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:FreedomConfig": {
+      "properties": {
+        "domainStrategy": {
+          "type": "string"
+        },
+        "timeout": {
+          "type": "integer"
+        },
+        "redirect": {
+          "type": "string"
+        },
+        "userLevel": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:GunConfig": {
+      "properties": {
+        "serviceName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPAccount": {
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "pass": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPClientConfig": {
+      "properties": {
+        "servers": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPRemoteConfig"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPConfig": {
+      "properties": {
+        "host": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "path": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "headers": {
+          "patternProperties": {
+            ".*": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPRemoteConfig": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "users": {
+          "items": true,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPServerConfig": {
+      "properties": {
+        "timeout": {
+          "type": "integer"
+        },
+        "accounts": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPAccount"
+          },
+          "type": "array"
+        },
+        "allowTransparent": {
+          "type": "boolean"
+        },
+        "userLevel": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourAllocationConfig": {
+      "properties": {
+        "strategy": {
+          "type": "string"
+        },
+        "concurrency": {
+          "type": "integer"
+        },
+        "refresh": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourConfig": {
+      "properties": {
+        "port": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPortRange"
+        },
+        "listen": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "allocate": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourAllocationConfig"
+        },
+        "streamSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:StreamConfig"
+        },
+        "domainOverride": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "sniffing": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_sniffer:SniffingConfig"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:KCPConfig": {
+      "properties": {
+        "mtu": {
+          "type": "integer"
+        },
+        "tti": {
+          "type": "integer"
+        },
+        "uplinkCapacity": {
+          "type": "integer"
+        },
+        "downlinkCapacity": {
+          "type": "integer"
+        },
+        "congestion": {
+          "type": "boolean"
+        },
+        "readBufferSize": {
+          "type": "integer"
+        },
+        "writeBufferSize": {
+          "type": "integer"
+        },
+        "header": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomKCPHeaderConfig"
+        },
+        "seed": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:LoopbackConfig": {
+      "properties": {
+        "inboundTag": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:MultiObservatoryConfig": {
+      "properties": {
+        "observers": {
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomMultiObservatoryItem"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:MultiObservatoryItem": {
+      "properties": {
+        "tag": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:ObservatoryConfig": {
+      "properties": {
+        "subjectSelector": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "probeUrl": {
+          "type": "string"
+        },
+        "probeInterval": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:OutboundDetourConfig": {
+      "properties": {
+        "sendThrough": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "streamSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:StreamConfig"
+        },
+        "proxySettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_proxycfg:ProxyConfig"
+        },
+        "mux": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:Policy": {
+      "properties": {
+        "handshake": {
+          "type": "integer"
+        },
+        "connIdle": {
+          "type": "integer"
+        },
+        "uplinkOnly": {
+          "type": "integer"
+        },
+        "downlinkOnly": {
+          "type": "integer"
+        },
+        "statsUserUplink": {
+          "type": "boolean"
+        },
+        "statsUserDownlink": {
+          "type": "boolean"
+        },
+        "bufferSize": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:PolicyConfig": {
+      "properties": {
+        "levels": {
+          "patternProperties": {
+            ".*": {
+              "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Policy"
+            }
+          },
+          "type": "object"
+        },
+        "system": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:SystemPolicy"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:PortalConfig": {
+      "properties": {
+        "tag": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:QUICConfig": {
+      "properties": {
+        "header": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomKCPHeaderConfig"
+        },
+        "security": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:ReverseConfig": {
+      "properties": {
+        "bridges": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:BridgeConfig"
+          },
+          "type": "array"
+        },
+        "portals": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:PortalConfig"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:ShadowsocksClientConfig": {
+      "properties": {
+        "servers": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:ShadowsocksServerTarget"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:ShadowsocksServerConfig": {
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "udp": {
+          "type": "boolean"
+        },
+        "level": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string"
+        },
+        "network": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "ivCheck": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:ShadowsocksServerTarget": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "method": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "ota": {
+          "type": "boolean"
+        },
+        "level": {
+          "type": "integer"
+        },
+        "ivCheck": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:SocksAccount": {
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "pass": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:SocksClientConfig": {
+      "properties": {
+        "servers": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:SocksRemoteConfig"
+          },
+          "type": "array"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:SocksRemoteConfig": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "users": {
+          "items": true,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:SocksServerConfig": {
+      "properties": {
+        "auth": {
+          "type": "string"
+        },
+        "accounts": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:SocksAccount"
+          },
+          "type": "array"
+        },
+        "udp": {
+          "type": "boolean"
+        },
+        "ip": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "timeout": {
+          "type": "integer"
+        },
+        "userLevel": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:StatsConfig": {
+      "properties": {},
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:StreamConfig": {
+      "properties": {
+        "network": {
+          "type": "string"
+        },
+        "security": {
+          "type": "string"
+        },
+        "tlsSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_tlscfg:TLSConfig"
+        },
+        "tcpSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:TCPConfig"
+        },
+        "kcpSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:KCPConfig"
+        },
+        "wsSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:WebSocketConfig"
+        },
+        "httpSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPConfig"
+        },
+        "dsSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:DomainSocketConfig"
+        },
+        "quicSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:QUICConfig"
+        },
+        "gunSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:GunConfig"
+        },
+        "grpcSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:GunConfig"
+        },
+        "sockopt": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_socketcfg:SocketConfig"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:SystemPolicy": {
+      "properties": {
+        "statsInboundUplink": {
+          "type": "boolean"
+        },
+        "statsInboundDownlink": {
+          "type": "boolean"
+        },
+        "statsOutboundUplink": {
+          "type": "boolean"
+        },
+        "statsOutboundDownlink": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:TCPConfig": {
+      "properties": {
+        "header": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomTCPHeaderConfig"
+        },
+        "acceptProxyProtocol": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:TransportConfig": {
+      "properties": {
+        "tcpSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:TCPConfig"
+        },
+        "kcpSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:KCPConfig"
+        },
+        "wsSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:WebSocketConfig"
+        },
+        "httpSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPConfig"
+        },
+        "dsSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:DomainSocketConfig"
+        },
+        "quicSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:QUICConfig"
+        },
+        "gunSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:GunConfig"
+        },
+        "grpcSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:GunConfig"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanClientConfig": {
+      "properties": {
+        "servers": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanServerTarget"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanInboundFallback": {
+      "properties": {
+        "alpn": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "dest": true,
+        "xver": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanServerConfig": {
+      "properties": {
+        "clients": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanUserConfig"
+          },
+          "type": "array"
+        },
+        "fallback": true,
+        "fallbacks": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanInboundFallback"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanServerTarget": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanUserConfig": {
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VLessInboundConfig": {
+      "properties": {
+        "clients": {
+          "items": true,
+          "type": "array"
+        },
+        "decryption": {
+          "type": "string"
+        },
+        "fallback": true,
+        "fallbacks": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VLessInboundFallback"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VLessInboundFallback": {
+      "properties": {
+        "alpn": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "dest": true,
+        "xver": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VLessOutboundConfig": {
+      "properties": {
+        "vnext": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VLessOutboundVnext"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VLessOutboundVnext": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "users": {
+          "items": true,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VMessDefaultConfig": {
+      "properties": {
+        "alterId": {
+          "type": "integer"
+        },
+        "level": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VMessDetourConfig": {
+      "properties": {
+        "to": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VMessInboundConfig": {
+      "properties": {
+        "clients": {
+          "items": true,
+          "type": "array"
+        },
+        "features": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:FeaturesConfig"
+        },
+        "default": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VMessDefaultConfig"
+        },
+        "detour": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VMessDetourConfig"
+        },
+        "disableInsecureEncryption": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VMessOutboundConfig": {
+      "properties": {
+        "vnext": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VMessOutboundTarget"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VMessOutboundTarget": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "users": {
+          "items": true,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:WebSocketConfig": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "headers": {
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "acceptProxyProtocol": {
+          "type": "boolean"
+        },
+        "maxEarlyData": {
+          "type": "integer"
+        },
+        "useBrowserForwarding": {
+          "type": "boolean"
+        },
+        "earlyDataHeaderName": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

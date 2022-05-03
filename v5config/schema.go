@@ -1,13 +1,14 @@
 package v5config
 
 import (
+	"log"
 	"reflect"
-	"strings"
 
 	C "github.com/EHfive/v2ray-jsonschema/common"
 	"github.com/iancoleman/orderedmap"
 	JS "github.com/invopop/jsonschema"
 
+	"github.com/v2fly/v2ray-core/v5/app/router"
 	"github.com/v2fly/v2ray-core/v5/infra/conf/v5cfg"
 
 	_ "github.com/v2fly/v2ray-core/v5/main/distro/all"
@@ -17,6 +18,7 @@ type CustomInboundConfig struct{}
 type CustomOutboundConfig struct{}
 type CustomStreamSettings struct{}
 type CustomServices struct{}
+type CustomBalancingRule struct{}
 
 func (CustomInboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	return buildInOutBoundSchema(r, d, C.ToElemType((*v5cfg.InboundConfig)(nil)), "inbound", []string{
@@ -48,40 +50,34 @@ func (CustomOutboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 }
 
 func (CustomStreamSettings) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	basic := buildBasicObjectSchema(r, d, C.ToElemType((*v5cfg.StreamConfig)(nil)), []string{
-		"transport",
-		"transportSettings",
-		"security",
-		"securitySettings",
+	basicS := C.BuildBasicObjectSchema(r, d, C.ToElemType((*v5cfg.StreamConfig)(nil)), []string{
+		"transport", "transportSettings", "security", "securitySettings",
 	})
-
-	transport := buildOneOfConfigsSchema(r, d, "transport", "transportSettings", "transport", []string{
-		"grpc",
-		"kcp",
-		"tcp",
-		"ws",
+	transportS := C.BuildOneOfConfigsSchema(r, d, "transport", "transportSettings", "transport", []string{
+		"grpc", "kcp", "tcp", "ws",
 	})
-
-	security := buildOneOfConfigsSchema(r, d, "security", "securitySettings", "security", []string{
+	securityS := C.BuildOneOfConfigsSchema(r, d, "security", "securitySettings", "security", []string{
 		"tls",
 	})
 
 	return &JS.Schema{
-		AllOf: []*JS.Schema{
-			basic,
-			transport,
-			security,
-		},
+		AllOf: []*JS.Schema{basicS, transportS, securityS},
 	}
 }
 
 func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	services := []string{
-		"browser",
-		"policy",
-		"stats",
 		"backgroundObservatory",
+		"browser",
 		"burstObservatory",
+		"commander",
+		"fakeDns",
+		"fakeDnsMulti",
+		"instman",
+		"policy",
+		"restfulapi",
+		"reverse",
+		"stats",
 	}
 
 	props := orderedmap.New()
@@ -95,44 +91,13 @@ func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema 
 	}
 }
 
-func buildBasicObjectSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, excludes []string) *JS.Schema {
-	s := r.RefOrReflectTypeToSchema(d, t)
-	res := s
-	if s.Ref != "" {
-		// s = d[s.Ref]
-		defName := strings.Replace(s.Ref, "#/$defs/", "", 1)
-		s = d[defName]
-	}
-	for _, name := range excludes {
-		s.Properties.Delete(name)
-	}
-	s.AdditionalProperties = JS.TrueSchema
-	return res
-}
-
-func buildOneOfConfigsSchema(r *JS.Reflector, d JS.Definitions, idKey string, configKey string, interfaceType string, shortNames []string) *JS.Schema {
-	var schemas []*JS.Schema
-	for _, name := range shortNames {
-		props := orderedmap.New()
-		props.Set(idKey, &JS.Schema{Const: name})
-		props.Set(configKey, r.RefOrReflectTypeToSchema(d, C.LoadTypeByAlias(interfaceType, name)))
-		schema := &JS.Schema{
-			AdditionalProperties: JS.TrueSchema,
-			Properties:           props,
-		}
-		schemas = append(schemas, schema)
-	}
+func (CustomBalancingRule) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	basicS := C.BuildBasicObjectSchema(r, d, C.ToElemType((*router.BalancingRule)(nil)), []string{
+		"strategy", "strategySettings",
+	})
+	strategyS := C.BuildRouterStrategySchema(r, d, "strategy", "strategySettings")
 	return &JS.Schema{
-		OneOf: schemas,
-	}
-}
-
-func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, interfaceType string, protocols []string) *JS.Schema {
-	return &JS.Schema{
-		AllOf: []*JS.Schema{
-			buildBasicObjectSchema(r, d, t, []string{"protocol", "settings"}),
-			buildOneOfConfigsSchema(r, d, "protocol", "settings", interfaceType, protocols),
-		},
+		AllOf: []*JS.Schema{basicS, strategyS},
 	}
 }
 
@@ -153,19 +118,24 @@ func alterField(t reflect.Type, f *reflect.StructField) bool {
 		case "Services":
 			f.Type = C.ToElemType((*CustomServices)(nil))
 		}
-	case C.ToElemType((*v5cfg.InboundConfig)(nil)):
-		switch f.Name {
-		case "StreamSetting":
-			f.Type = C.ToElemType((*CustomStreamSettings)(nil))
-		}
-	case C.ToElemType((*v5cfg.OutboundConfig)(nil)):
-		switch f.Name {
-		case "StreamSetting":
-			f.Type = C.ToElemType((*CustomStreamSettings)(nil))
-		}
 	}
 
-	return false
+	matchType := f.Type
+	if matchType.Kind() == reflect.Ptr {
+		matchType = f.Type.Elem()
+	}
+	switch matchType {
+	case C.ToElemType((*v5cfg.StreamConfig)(nil)):
+		f.Type = C.ToElemType((*CustomStreamSettings)(nil))
+	case reflect.TypeOf(([]*router.BalancingRule)(nil)):
+		f.Type = reflect.TypeOf(([]*CustomBalancingRule)(nil))
+	}
+
+	if t.Name() == "router.RoutingRule" {
+		log.Println(t, f)
+	}
+
+	return C.DefaultAlterField(t, f)
 }
 
 func customFields(t reflect.Type) []reflect.StructField {
