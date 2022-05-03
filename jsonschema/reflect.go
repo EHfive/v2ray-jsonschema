@@ -618,7 +618,7 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 
 func (r *Reflector) reflectFieldPbOneOf(st *Schema, definitions Definitions, t reflect.Type, f reflect.StructField) bool {
 	tag, exist := f.Tag.Lookup("protobuf_oneof")
-	if !exist && !t.Implements(protoMessageType) {
+	if !exist || !t.Implements(protoMessageType) {
 		return false
 	}
 
