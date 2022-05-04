@@ -197,6 +197,10 @@ type Reflector struct {
 	// switching to just allowing additional properties instead.
 	IgnoredTypes []interface{}
 
+	IgnoreEnumNumber bool
+
+	DoNotSetContentType bool
+
 	// Lookup allows a function to be defined that will provide a custom mapping of
 	// types to Schema IDs. This allows existing schema documents to be referenced
 	// by their ID instead of being embedded into the current schema definitions.
@@ -373,7 +377,9 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 		for i := 0; i < enumValues.Len(); i++ {
 			value := enumValues.Get(i)
 			s.Enum = append(s.Enum, value.Name())
-			s.Enum = append(s.Enum, value.Number())
+			if !r.IgnoreEnumNumber {
+				s.Enum = append(s.Enum, value.Number())
+			}
 		}
 
 		return s
@@ -438,7 +444,9 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 		if t.Kind() == reflect.Slice && t.Elem() == byteSliceType.Elem() {
 			returnType.Type = "string"
 			// NOTE: ContentMediaType is not set here
-			returnType.ContentEncoding = "base64"
+			if !r.DoNotSetContentType {
+				returnType.ContentEncoding = "base64"
+			}
 			return returnType
 		}
 		returnType.Type = "array"
@@ -633,7 +641,7 @@ func (r *Reflector) reflectFieldPbOneOf(st *Schema, definitions Definitions, t r
 	fields := oneof.Fields()
 	for i := 0; i < fields.Len(); i++ {
 		field := fields.Get(i)
-		name := string(field.Name())
+		name := r.KeyNamer(string(field.Name()))
 		fieldType := reflect.TypeOf(field.Default().Interface())
 		st.Properties.Set(name, r.refOrReflectTypeToSchema(definitions, fieldType))
 		st.OneOf = append(st.OneOf, &Schema{
