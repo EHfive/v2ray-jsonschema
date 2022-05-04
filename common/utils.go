@@ -97,27 +97,28 @@ func BuildBasicObjectSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, e
 	return res
 }
 
-func BuildOneOfItemSchema(r *JS.Reflector, d JS.Definitions, idKey string, configKey string, idName string, nodeType reflect.Type) *JS.Schema {
-	props := orderedmap.New()
-	props.Set(idKey, &JS.Schema{Const: idName})
-	if nodeType != nil {
-		props.Set(configKey, r.RefOrReflectTypeToSchema(d, nodeType))
-	}
+func BuildIfThenObjectSchema(ifKey string, ifName string, thenKey string, thenSchema *JS.Schema) *JS.Schema {
+	ifProps := orderedmap.New()
+	ifProps.Set(ifKey, &JS.Schema{Const: ifName})
+	thenProps := orderedmap.New()
+	thenProps.Set(thenKey, thenSchema)
 	return &JS.Schema{
-		Type:       "object",
-		Properties: props,
+		If:   &JS.Schema{Type: "object", Properties: ifProps, Required: []string{ifKey}},
+		Then: &JS.Schema{Type: "object", Properties: thenProps},
 	}
 }
 
-func BuildOneOfConfigsSchema(r *JS.Reflector, d JS.Definitions, idKey string, configKey string, interfaceType string, shortNames []string) *JS.Schema {
+func BuildConditionalItemSchema(r *JS.Reflector, d JS.Definitions, idKey string, configKey string, idName string, nodeType reflect.Type) *JS.Schema {
+	return BuildIfThenObjectSchema(idKey, idName, configKey, r.RefOrReflectTypeToSchema(d, nodeType))
+}
+
+func BuildConditionalSchemaList(r *JS.Reflector, d JS.Definitions, idKey string, configKey string, interfaceType string, shortNames []string) []*JS.Schema {
 	var schemas []*JS.Schema
 	for _, name := range shortNames {
-		s := BuildOneOfItemSchema(r, d, idKey, configKey, name, LoadTypeByAlias(interfaceType, name))
+		s := BuildConditionalItemSchema(r, d, idKey, configKey, name, LoadTypeByAlias(interfaceType, name))
 		schemas = append(schemas, s)
 	}
-	return &JS.Schema{
-		OneOf: schemas,
-	}
+	return schemas
 }
 
 func BuildSingleOrArraySchema(r *JS.Reflector, d JS.Definitions, t reflect.Type) *JS.Schema {
@@ -128,8 +129,8 @@ func BuildSingleOrArraySchema(r *JS.Reflector, d JS.Definitions, t reflect.Type)
 	}}
 }
 
-func BuildRouterStrategySchema(r *JS.Reflector, d JS.Definitions, idKey string, configKey string) *JS.Schema {
-	return BuildOneOfConfigsSchema(r, d, idKey, configKey, "balancer", []string{
+func BuildRouterStrategySchemaList(r *JS.Reflector, d JS.Definitions, idKey string, configKey string) []*JS.Schema {
+	return BuildConditionalSchemaList(r, d, idKey, configKey, "balancer", []string{
 		"random", "leastping", "leastload",
 	})
 }

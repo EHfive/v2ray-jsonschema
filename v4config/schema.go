@@ -58,18 +58,19 @@ func (CustomHostAddress) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sche
 func (CustomTCPHeaderConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	noneProps := orderedmap.New()
 	noneProps.Set("type", &JS.Schema{Const: "none"})
+	noneS := &JS.Schema{
+		If: &JS.Schema{Type: "object", Properties: noneProps},
+	}
 
 	httpProps := orderedmap.New()
 	httpProps.Set("type", &JS.Schema{Const: "http"})
 	authS := r.RefOrReflectTypeToSchema(d, C.ToElemType((*v4.Authenticator)(nil)))
+	httpS := &JS.Schema{
+		If:   &JS.Schema{Type: "object", Properties: httpProps},
+		Then: authS,
+	}
 
-	return &JS.Schema{OneOf: []*JS.Schema{
-		{Type: "object", Properties: noneProps},
-		{AllOf: []*JS.Schema{
-			{Type: "object", Properties: httpProps},
-			authS,
-		}},
-	}}
+	return &JS.Schema{AllOf: []*JS.Schema{noneS, httpS}}
 }
 
 func (CustomKCPHeaderConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
@@ -88,19 +89,18 @@ func (CustomMultiObservatoryItem) JSONSchema2(r *JS.Reflector, d JS.Definitions)
 		"type", "settings",
 	})
 
-	burstS := C.BuildOneOfItemSchema(r, d, "type", "settings", "burst", C.ToElemType((*v4.BurstObservatoryConfig)(nil)))
-	defaultS := C.BuildOneOfItemSchema(r, d, "type", "settings", "default", C.ToElemType((*v4.ObservatoryConfig)(nil)))
+	burstS := C.BuildConditionalItemSchema(r, d, "type", "settings", "burst", C.ToElemType((*v4.BurstObservatoryConfig)(nil)))
+	defaultS := C.BuildConditionalItemSchema(r, d, "type", "settings", "default", C.ToElemType((*v4.ObservatoryConfig)(nil)))
 
 	return &JS.Schema{
 		AllOf: []*JS.Schema{
-			basicS,
-			{OneOf: []*JS.Schema{burstS, defaultS}},
+			basicS, burstS, defaultS,
 		},
 	}
 }
 
 func (CustomStrategyConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	return C.BuildRouterStrategySchema(r, d, "type", "settings")
+	return &JS.Schema{AllOf: C.BuildRouterStrategySchemaList(r, d, "type", "settings")}
 }
 
 func alterField(t reflect.Type, f *reflect.StructField) bool {

@@ -42,14 +42,12 @@ func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, co
 	configKey := "settings"
 
 	var schemas []*JS.Schema
+	basicS := C.BuildBasicObjectSchema(r, d, t, []string{idKey, configKey})
+	schemas = append(schemas, basicS)
+
 	for _, pair := range configPairs {
-		s := C.BuildOneOfItemSchema(r, d, idKey, configKey, pair.Name, C.ToElemType(pair.Interface))
+		s := C.BuildConditionalItemSchema(r, d, idKey, configKey, pair.Name, C.ToElemType(pair.Interface))
 		schemas = append(schemas, s)
 	}
-	return &JS.Schema{
-		AllOf: []*JS.Schema{
-			C.BuildBasicObjectSchema(r, d, t, []string{idKey, configKey}),
-			{OneOf: schemas},
-		},
-	}
+	return &JS.Schema{AllOf: schemas}
 }

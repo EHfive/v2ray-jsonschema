@@ -8,10 +8,7 @@ import (
 )
 
 func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, interfaceType string, protocols []string) *JS.Schema {
-	return &JS.Schema{
-		AllOf: []*JS.Schema{
-			C.BuildBasicObjectSchema(r, d, t, []string{"protocol", "settings"}),
-			C.BuildOneOfConfigsSchema(r, d, "protocol", "settings", interfaceType, protocols),
-		},
-	}
+	allOf := C.BuildConditionalSchemaList(r, d, "protocol", "settings", interfaceType, protocols)
+	allOf = append(allOf, C.BuildBasicObjectSchema(r, d, t, []string{"protocol", "settings"}))
+	return &JS.Schema{AllOf: allOf}
 }

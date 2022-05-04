@@ -53,16 +53,18 @@ func (CustomStreamSettings) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 	basicS := C.BuildBasicObjectSchema(r, d, C.ToElemType((*v5cfg.StreamConfig)(nil)), []string{
 		"transport", "transportSettings", "security", "securitySettings",
 	})
-	transportS := C.BuildOneOfConfigsSchema(r, d, "transport", "transportSettings", "transport", []string{
+	transportSList := C.BuildConditionalSchemaList(r, d, "transport", "transportSettings", "transport", []string{
 		"grpc", "kcp", "tcp", "ws",
 	})
-	securityS := C.BuildOneOfConfigsSchema(r, d, "security", "securitySettings", "security", []string{
+	securitySList := C.BuildConditionalSchemaList(r, d, "security", "securitySettings", "security", []string{
 		"tls",
 	})
 
-	return &JS.Schema{
-		AllOf: []*JS.Schema{basicS, transportS, securityS},
-	}
+	var allOf []*JS.Schema
+	allOf = append(allOf, basicS)
+	allOf = append(allOf, transportSList...)
+	allOf = append(allOf, securitySList...)
+	return &JS.Schema{AllOf: allOf}
 }
 
 func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
@@ -92,13 +94,12 @@ func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema 
 }
 
 func (CustomBalancingRule) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	allOf := C.BuildRouterStrategySchemaList(r, d, "strategy", "strategySettings")
 	basicS := C.BuildBasicObjectSchema(r, d, C.ToElemType((*router.BalancingRule)(nil)), []string{
 		"strategy", "strategySettings",
 	})
-	strategyS := C.BuildRouterStrategySchema(r, d, "strategy", "strategySettings")
-	return &JS.Schema{
-		AllOf: []*JS.Schema{basicS, strategyS},
-	}
+	allOf = append(allOf, basicS)
+	return &JS.Schema{AllOf: allOf}
 }
 
 func alterField(t reflect.Type, f *reflect.StructField) bool {
