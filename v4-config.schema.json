@@ -3,6 +3,24 @@
   "$id": "https://github.com/v2fly/v2ray-core/v5/infra/conf/v4/github:v2fly_v2ray-core_v5_infra_conf_v4:-config",
   "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Config",
   "$defs": {
+    "github:EHfive_v2ray-jsonschema_common:CustomPortRange": {
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "properties": {
+            "from": {
+              "type": "integer"
+            },
+            "to": {
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomString": {
       "type": "string"
     },
@@ -1157,7 +1175,7 @@
     "github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourConfig": {
       "properties": {
         "port": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPortRange"
         },
         "listen": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
