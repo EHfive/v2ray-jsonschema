@@ -24,10 +24,10 @@ import (
 //
 // When parsing type comments, we use the `go/doc`'s Synopsis method to extract the first phrase
 // only. Field comments, which tend to be much shorter, will include everything.
-func ExtractGoComments(base, path string, commentMap map[string]string) error {
+func ExtractGoComments(base, searchPath string, commentMap map[string]string) error {
 	fset := token.NewFileSet()
 	dict := make(map[string][]*ast.Package)
-	err := filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
+	err := filepath.Walk(searchPath, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -38,7 +38,11 @@ func ExtractGoComments(base, path string, commentMap map[string]string) error {
 			}
 			for _, v := range d {
 				// paths may have multiple packages, like for tests
-				k := gopath.Join(base, path)
+				rel, err := filepath.Rel(searchPath, path)
+				if err != nil {
+					continue
+				}
+				k := gopath.Join(base, rel)
 				dict[k] = append(dict[k], v)
 			}
 		}
