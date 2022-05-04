@@ -23,7 +23,7 @@ import (
 )
 
 func NewDefaultReflector() JS.Reflector {
-	return JS.Reflector{
+	r := JS.Reflector{
 		RequiredFromJSONSchemaTags: true,
 		AllowAdditionalProperties:  true,
 		DoNotSetContentType:        true,
@@ -39,6 +39,9 @@ func NewDefaultReflector() JS.Reflector {
 		},
 		KeyNamer: strcase.LowerCamelCase,
 	}
+
+	r.AddGoComments("github.com/v2fly/v2ray-core/v5", "./vendor/github.com/v2fly/v2ray-core/v5")
+	return r
 }
 
 func DefaultAlterField(_ reflect.Type, f *reflect.StructField) bool {
