@@ -16,6 +16,7 @@ import (
 
 type CustomFakeDNSConfig struct{}
 type CustomHostAddress struct{}
+type CustomNameServerConfig struct{}
 
 type CustomInboundConfig struct{}
 type CustomOutboundConfig struct{}
@@ -53,6 +54,13 @@ func (CustomFakeDNSConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sc
 
 func (CustomHostAddress) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	return C.BuildSingleOrArraySchema(r, d, C.ToElemType((*C.CustomString)(nil)))
+}
+
+func (CustomNameServerConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	return &JS.Schema{OneOf: []*JS.Schema{
+		{Type: "string"},
+		r.RefOrReflectTypeToSchema(d, C.ToElemType((*dns.NameServerConfig)(nil))),
+	}}
 }
 
 func (CustomTCPHeaderConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
@@ -150,6 +158,8 @@ func alterField(t reflect.Type, f *reflect.StructField) bool {
 		f.Type = C.ToElemType((*CustomStrategyConfig)(nil))
 	case reflect.TypeOf((map[string]*dns.HostAddress)(nil)):
 		f.Type = reflect.TypeOf((map[string]CustomHostAddress)(nil))
+	case reflect.TypeOf(([]*dns.NameServerConfig)(nil)):
+		f.Type = reflect.TypeOf(([]CustomNameServerConfig)(nil))
 	}
 
 	return C.DefaultAlterField(t, f)
