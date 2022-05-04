@@ -49,8 +49,6 @@ func DefaultAlterField(_ reflect.Type, f *reflect.StructField) bool {
 		fallthrough
 	case ToElemType((*cfgcommon.Address)(nil)):
 		fallthrough
-	case ToElemType((*cfgcommon.PortList)(nil)):
-		fallthrough
 	case ToElemType((*duration.Duration)(nil)):
 		f.Type = ToElemType((*CustomString)(nil))
 
@@ -59,6 +57,8 @@ func DefaultAlterField(_ reflect.Type, f *reflect.StructField) bool {
 	case ToElemType((*cfgcommon.NetworkList)(nil)):
 		f.Type = ToElemType((*CustomStringList)(nil))
 
+	case ToElemType((*cfgcommon.PortList)(nil)):
+		fallthrough
 	case ToElemType((*cfgcommon.PortRange)(nil)):
 		f.Type = ToElemType((*CustomPortRange)(nil))
 

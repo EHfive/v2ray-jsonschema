@@ -22,15 +22,7 @@
           "type": "integer"
         },
         {
-          "properties": {
-            "from": {
-              "type": "integer"
-            },
-            "to": {
-              "type": "integer"
-            }
-          },
-          "type": "object"
+          "type": "string"
         }
       ]
     },

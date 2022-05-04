@@ -29,11 +29,8 @@ func (CustomStringList) JSONSchema() *JS.Schema {
 }
 
 func (CustomPortRange) JSONSchema() *JS.Schema {
-	props := orderedmap.New()
-	props.Set("from", &JS.Schema{Type: "integer"})
-	props.Set("to", &JS.Schema{Type: "integer"})
 	return &JS.Schema{OneOf: []*JS.Schema{
 		{Type: "integer"},
-		{Type: "object", Properties: props},
+		{Type: "string"},
 	}}
 }

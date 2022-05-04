@@ -9,15 +9,7 @@
           "type": "integer"
         },
         {
-          "properties": {
-            "from": {
-              "type": "integer"
-            },
-            "to": {
-              "type": "integer"
-            }
-          },
-          "type": "object"
+          "type": "string"
         }
       ]
     },
@@ -344,7 +336,7 @@
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
         },
         "port": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPortRange"
         },
         "network": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
@@ -353,7 +345,7 @@
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
         },
         "sourcePort": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPortRange"
         },
         "user": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
