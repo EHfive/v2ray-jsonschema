@@ -8,7 +8,7 @@ require (
 	github.com/iancoleman/orderedmap v0.2.0
 	github.com/invopop/jsonschema v0.4.0
 	github.com/stoewer/go-strcase v1.2.0
-	github.com/v2fly/v2ray-core/v5 v5.0.5
+	github.com/v2fly/v2ray-core/v5 v5.0.6
 	google.golang.org/protobuf v1.28.0
 )
 
