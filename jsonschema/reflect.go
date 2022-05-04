@@ -310,8 +310,6 @@ type protoEnum interface {
 
 var protoEnumType = reflect.TypeOf((*protoEnum)(nil)).Elem()
 
-var protoMessageType = reflect.TypeOf((*protoreflect.ProtoMessage)(nil)).Elem()
-
 // SetBaseSchemaID is a helper use to be able to set the reflectors base
 // schema ID from a string as opposed to then ID instance.
 func (r *Reflector) SetBaseSchemaID(id string) {
@@ -618,11 +616,15 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 
 func (r *Reflector) reflectFieldPbOneOf(st *Schema, definitions Definitions, t reflect.Type, f reflect.StructField) bool {
 	tag, exist := f.Tag.Lookup("protobuf_oneof")
-	if !exist || !t.Implements(protoMessageType) {
+	if !exist {
+		return false
+	}
+	v, ok := reflect.New(t).Interface().(protoreflect.ProtoMessage)
+	if !ok {
 		return false
 	}
 
-	oneofs := reflect.New(t).Interface().(protoreflect.ProtoMessage).ProtoReflect().Descriptor().Oneofs()
+	oneofs := v.ProtoReflect().Descriptor().Oneofs()
 	oneof := oneofs.ByName(protoreflect.Name(tag))
 	if oneof == nil {
 		return false
