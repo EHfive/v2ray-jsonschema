@@ -1,6 +1,6 @@
 # V2Ray JSON Schema
 
-利用Go类型反射系统构建 V2ray v4, v5 配置格式的 JSON schema
+利用Go类型反射系统构建 [V2Ray](https://github.com/v2fly/v2ray-core) v4, v5 配置格式的 JSON schema
 
 [English](./README.md)
 

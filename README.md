@@ -1,6 +1,6 @@
 # V2Ray JSON Schema
 
-Build JSON schemas of V2Ray v4, v5 json config format through Go type reflection system.
+Build JSON schemas of [V2Ray](https://github.com/v2fly/v2ray-core) v4, v5 json config format through Go type reflection system.
 
 [简体中文](./README_zh-CN.md)
 
