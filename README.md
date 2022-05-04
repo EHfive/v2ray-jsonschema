@@ -8,8 +8,9 @@ Build JSON schemas of V2Ray v4, v5 json config format through Go type reflection
 
 #### Specify the schema in-place
 
-Set property `$schema` to URL of corresponding format of JSON schema in V2Ray config file.
-VSCode is known to support this format, [see also](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings).
+Set property `$schema` to URL of corresponding format of JSON schema in V2Ray config file. You will then get auto suggestions from some IDEs while editing V2Ray config file.
+
+VSCode is known to support this syntax, [see also](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings).
 
 - jsonv4 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v4-config.schema.json
 - jsonv5 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json
@@ -34,6 +35,8 @@ VSCode is known to support this format, [see also](https://code.visualstudio.com
   ]
 }
 ```
+
+![autosuggestion-demo](./doc/code-suggestion-demo.gif)
 
 ### Caution
 
