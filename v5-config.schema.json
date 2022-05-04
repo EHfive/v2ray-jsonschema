@@ -684,7 +684,8 @@
           "type": "integer"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Config is the settings for BrowserForwarder."
     },
     "github:v2fly_v2ray-core_v5_app_commander:SimplifiedConfig": {
       "properties": {
@@ -720,7 +721,8 @@
           "type": "array"
         },
         "proxiedDomain": {
-          "type": "string"
+          "type": "string",
+          "description": "ProxiedDomain indicates the mapped domain has the same IP address on this\ndomain. V2Ray will use this domain for IP queries."
         }
       },
       "type": "object"
@@ -731,10 +733,12 @@
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_dns:SimplifiedNameServer"
           },
-          "type": "array"
+          "type": "array",
+          "description": "NameServer list used by this DNS client."
         },
         "clientIp": {
-          "type": "string"
+          "type": "string",
+          "description": "Client IP for EDNS client subnet. Must be 4 bytes (IPv4) or 16 bytes\n(IPv6)."
         },
         "staticHosts": {
           "items": {
@@ -743,10 +747,12 @@
           "type": "array"
         },
         "tag": {
-          "type": "string"
+          "type": "string",
+          "description": "Tag is the inbound tag of DNS client."
         },
         "disableCache": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "DisableCache disables DNS cache"
         },
         "queryStrategy": {
           "enum": [
@@ -891,7 +897,8 @@
           "items": {
             "type": "string"
           },
-          "type": "array"
+          "type": "array",
+          "description": "@Document The selectors for outbound under observation"
         },
         "probeUrl": {
           "type": "string"
@@ -908,7 +915,8 @@
           "items": {
             "type": "string"
           },
-          "type": "array"
+          "type": "array",
+          "description": "@Document The selectors for outbound under observation"
         },
         "pingConfig": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_observatory_burst:HealthPingConfig"
@@ -919,19 +927,24 @@
     "github:v2fly_v2ray-core_v5_app_observatory_burst:HealthPingConfig": {
       "properties": {
         "destination": {
-          "type": "string"
+          "type": "string",
+          "description": "destination url, need 204 for success return\ndefault http://www.google.com/gen_204"
         },
         "connectivity": {
-          "type": "string"
+          "type": "string",
+          "description": "connectivity check url"
         },
         "interval": {
-          "type": "integer"
+          "type": "integer",
+          "description": "health check interval, int64 values of time.Duration"
         },
         "samplingCount": {
-          "type": "integer"
+          "type": "integer",
+          "description": "sampling count is the amount of recent ping results which are kept for calculation"
         },
         "timeout": {
-          "type": "integer"
+          "type": "integer",
+          "description": "ping timeout, int64 values of time.Duration"
         }
       },
       "type": "object"
@@ -969,7 +982,8 @@
     "github:v2fly_v2ray-core_v5_app_policy:Policy_Buffer": {
       "properties": {
         "connection": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Buffer size per connection, in bytes. -1 for unlimited buffer."
         }
       },
       "type": "object"
@@ -1000,7 +1014,8 @@
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_policy:Second"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Timeout is a message for timeout settings in various stages, in seconds."
     },
     "github:v2fly_v2ray-core_v5_app_policy:Second": {
       "properties": {
@@ -1154,28 +1169,34 @@
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router_routercommon:Domain"
           },
-          "type": "array"
+          "type": "array",
+          "description": "List of domains for target domain matching."
         },
         "geoip": {
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router_routercommon:GeoIP"
           },
-          "type": "array"
+          "type": "array",
+          "description": "List of GeoIPs for target IP address matching. If this entry exists, the\ncidr above will have no effect. GeoIP fields with the same country code are\nsupposed to contain exactly same content. They will be merged during\nruntime. For customized GeoIPs, please leave country code empty."
         },
         "portList": {
-          "type": "string"
+          "type": "string",
+          "description": "List of ports."
         },
         "networks": {
-          "type": "string"
+          "type": "string",
+          "description": "List of networks for matching."
         },
         "sourceGeoip": {
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router_routercommon:GeoIP"
           },
-          "type": "array"
+          "type": "array",
+          "description": "List of GeoIPs for source IP address matching. If this entry exists, the\nsource_cidr above will have no effect."
         },
         "sourcePortList": {
-          "type": "string"
+          "type": "string",
+          "description": "List of ports for source port matching."
         },
         "userEmail": {
           "items": {
@@ -1205,7 +1226,8 @@
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router_routercommon:GeoSite"
           },
-          "type": "array"
+          "type": "array",
+          "description": "geo_domain instruct simplified config loader to load geo domain rule and fill in domain field."
         }
       },
       "type": "object"
@@ -1216,22 +1238,27 @@
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyWeight"
           },
-          "type": "array"
+          "type": "array",
+          "description": "weight settings"
         },
         "baselines": {
           "items": {
             "type": "integer"
           },
-          "type": "array"
+          "type": "array",
+          "description": "RTT baselines for selecting, int64 values of time.Duration"
         },
         "expected": {
-          "type": "integer"
+          "type": "integer",
+          "description": "expected nodes count to select"
         },
         "maxRtt": {
-          "type": "integer"
+          "type": "integer",
+          "description": "max acceptable rtt, filter away high delay nodes. defalut 0"
         },
         "tolerance": {
-          "type": "number"
+          "type": "number",
+          "description": "acceptable failure rate"
         },
         "observerTag": {
           "type": "string"
@@ -1268,16 +1295,19 @@
     "github:v2fly_v2ray-core_v5_app_router_routercommon:CIDR": {
       "properties": {
         "ip": {
-          "type": "string"
+          "type": "string",
+          "description": "IP address, should be either 4 or 16 bytes."
         },
         "prefix": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Number of leading ones in the network mask."
         },
         "ipAddr": {
           "type": "string"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "IP for routing decision, in CIDR form."
     },
     "github:v2fly_v2ray-core_v5_app_router_routercommon:Domain": {
       "properties": {
@@ -1287,19 +1317,23 @@
             "Regex",
             "RootDomain",
             "Full"
-          ]
+          ],
+          "description": "Domain matching type."
         },
         "value": {
-          "type": "string"
+          "type": "string",
+          "description": "Domain value."
         },
         "attribute": {
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router_routercommon:Domain_Attribute"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Attributes of this domain. May be used for filtering."
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Domain for routing decision."
     },
     "github:v2fly_v2ray-core_v5_app_router_routercommon:Domain_Attribute": {
       "oneOf": [
@@ -1342,7 +1376,8 @@
           "type": "boolean"
         },
         "resourceHash": {
-          "type": "string"
+          "type": "string",
+          "description": "resource_hash instruct simplified config converter to load domain from geo file."
         },
         "code": {
           "type": "string"
@@ -1365,7 +1400,8 @@
           "type": "array"
         },
         "resourceHash": {
-          "type": "string"
+          "type": "string",
+          "description": "resource_hash instruct simplified config converter to load domain from geo file."
         },
         "code": {
           "type": "string"
@@ -1398,7 +1434,8 @@
           "type": "integer"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Endpoint of a network connection."
     },
     "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig": {
       "properties": {
@@ -1851,7 +1888,8 @@
           "type": "integer"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Downlink capacity, in MB."
     },
     "github:v2fly_v2ray-core_v5_transport_internet_kcp:EncryptionSeed": {
       "properties": {
@@ -1859,7 +1897,8 @@
           "type": "string"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Maximum Transmission Unit, in bytes."
     },
     "github:v2fly_v2ray-core_v5_transport_internet_kcp:MTU": {
       "properties": {
@@ -1867,12 +1906,14 @@
           "type": "integer"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Maximum Transmission Unit, in bytes."
     },
     "github:v2fly_v2ray-core_v5_transport_internet_kcp:ReadBuffer": {
       "properties": {
         "size": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Buffer size in bytes."
         }
       },
       "type": "object"
@@ -1883,7 +1924,8 @@
           "type": "integer"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Transmission Time Interview, in milli-sec."
     },
     "github:v2fly_v2ray-core_v5_transport_internet_kcp:UplinkCapacity": {
       "properties": {
@@ -1891,12 +1933,14 @@
           "type": "integer"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "Uplink capacity, in MB."
     },
     "github:v2fly_v2ray-core_v5_transport_internet_kcp:WriteBuffer": {
       "properties": {
         "size": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Buffer size in bytes."
         }
       },
       "type": "object"
@@ -1915,10 +1959,12 @@
     "github:v2fly_v2ray-core_v5_transport_internet_tls:Certificate": {
       "properties": {
         "certificate": {
-          "type": "string"
+          "type": "string",
+          "description": "TLS certificate in x509 format."
         },
         "key": {
-          "type": "string"
+          "type": "string",
+          "description": "TLS key in x509 format."
         },
         "usage": {
           "enum": [
@@ -1940,37 +1986,45 @@
     "github:v2fly_v2ray-core_v5_transport_internet_tls:Config": {
       "properties": {
         "allowInsecure": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether or not to allow self-signed certificates."
         },
         "certificate": {
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_tls:Certificate"
           },
-          "type": "array"
+          "type": "array",
+          "description": "List of certificates to be served on server."
         },
         "serverName": {
-          "type": "string"
+          "type": "string",
+          "description": "Override server name."
         },
         "nextProtocol": {
           "items": {
             "type": "string"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Lists of string as ALPN values."
         },
         "enableSessionResumption": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether or not to enable session (ticket) resumption."
         },
         "disableSystemRoot": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "If true, root certificates on the system will not be loaded for\nverification."
         },
         "pinnedPeerCertificateChainSha256": {
           "items": {
             "type": "string"
           },
-          "type": "array"
+          "type": "array",
+          "description": "@Document A pinned certificate chain sha256 hash.\n@Document If the server's hash does not match this value, the connection will be aborted.\n@Document This value replace allow_insecure.\n@Critical"
         },
         "verifyClientCertificate": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "If true, the client is required to present a certificate."
         }
       },
       "type": "object"
@@ -1978,7 +2032,8 @@
     "github:v2fly_v2ray-core_v5_transport_internet_websocket:Config": {
       "properties": {
         "path": {
-          "type": "string"
+          "type": "string",
+          "description": "URL path to the WebSocket service. Empty value means root(/)."
         },
         "header": {
           "items": {

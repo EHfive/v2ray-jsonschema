@@ -273,6 +273,16 @@
         }
       ]
     },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomNameServerConfig": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:NameServerConfig"
+        }
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_v4config:CustomOutboundConfig": {
       "allOf": [
         {
@@ -640,22 +650,27 @@
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyWeight"
           },
-          "type": "array"
+          "type": "array",
+          "description": "weight settings"
         },
         "baselines": {
           "items": {
             "type": "integer"
           },
-          "type": "array"
+          "type": "array",
+          "description": "RTT baselines for selecting, int64 values of time.Duration"
         },
         "expected": {
-          "type": "integer"
+          "type": "integer",
+          "description": "expected nodes count to select"
         },
         "maxRtt": {
-          "type": "integer"
+          "type": "integer",
+          "description": "max acceptable rtt, filter away high delay nodes. defalut 0"
         },
         "tolerance": {
-          "type": "number"
+          "type": "number",
+          "description": "acceptable failure rate"
         },
         "observerTag": {
           "type": "string"
@@ -828,7 +843,7 @@
       "properties": {
         "servers": {
           "items": {
-            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:NameServerConfig"
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomNameServerConfig"
           },
           "type": "array"
         },
@@ -859,7 +874,8 @@
           "type": "boolean"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "DNSConfig is a JSON serializable object for dns.Config."
     },
     "github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:NameServerConfig": {
       "properties": {
@@ -936,7 +952,8 @@
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "HealthCheckSettings holds settings for health Checker"
     },
     "github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:RouterConfig": {
       "properties": {
@@ -1090,7 +1107,8 @@
           "type": "array"
         },
         "pingConfig": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:HealthCheckSettings"
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_router:HealthCheckSettings",
+          "description": "health check settings"
         }
       },
       "type": "object"
@@ -1098,25 +1116,30 @@
     "github:v2fly_v2ray-core_v5_infra_conf_v4:Config": {
       "properties": {
         "port": {
-          "type": "integer"
+          "type": "integer",
+          "description": "Port of this Point server.\nDeprecated: Port exists for historical compatibility\nand should not be used."
         },
         "inbound": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourConfig"
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourConfig",
+          "description": "Deprecated: InboundConfig exists for historical compatibility\nand should not be used."
         },
         "outbound": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:OutboundDetourConfig"
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:OutboundDetourConfig",
+          "description": "Deprecated: OutboundConfig exists for historical compatibility\nand should not be used."
         },
         "inboundDetour": {
           "items": {
             "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomInboundConfig"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Deprecated: InboundDetours exists for historical compatibility\nand should not be used."
         },
         "outboundDetour": {
           "items": {
             "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomOutboundConfig"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Deprecated: OutboundDetours exists for historical compatibility\nand should not be used."
         },
         "log": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_log:LogConfig"
@@ -1821,7 +1844,8 @@
           "type": "array"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "TrojanClientConfig is configuration of trojan servers"
     },
     "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanInboundFallback": {
       "properties": {
@@ -1839,7 +1863,8 @@
           "type": "integer"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "TrojanInboundFallback is fallback configuration"
     },
     "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanServerConfig": {
       "properties": {
@@ -1857,7 +1882,8 @@
           "type": "array"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "TrojanServerConfig is Inbound configuration"
     },
     "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanServerTarget": {
       "properties": {
@@ -1877,7 +1903,8 @@
           "type": "integer"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "TrojanServerTarget is configuration of a single trojan server"
     },
     "github:v2fly_v2ray-core_v5_infra_conf_v4:TrojanUserConfig": {
       "properties": {
@@ -1891,7 +1918,8 @@
           "type": "string"
         }
       },
-      "type": "object"
+      "type": "object",
+      "description": "TrojanUserConfig is user configuration"
     },
     "github:v2fly_v2ray-core_v5_infra_conf_v4:VLessInboundConfig": {
       "properties": {
