@@ -3,8 +3,17 @@
   "$id": "https://github.com/v2fly/v2ray-core/v5/infra/conf/v5cfg/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:-root-config",
   "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:RootConfig",
   "$defs": {
-    "github:EHfive_v2ray-jsonschema_common:CustomAny": {
-      "properties": {},
+    "github:EHfive_v2ray-jsonschema_common:CustomPbAny": {
+      "properties": {
+        "typeUrl": {
+          "type": "string",
+          "pattern": "^types\\.v2fly\\.org/"
+        },
+        "value": {
+          "type": "string",
+          "contentEncoding": "base64"
+        }
+      },
       "type": "object"
     },
     "github:EHfive_v2ray-jsonschema_common:CustomPortRange": {
@@ -1627,7 +1636,7 @@
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:ReadBuffer"
         },
         "headerConfig": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomAny"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPbAny"
         },
         "seed": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_kcp:EncryptionSeed"
@@ -1694,7 +1703,7 @@
     "github:v2fly_v2ray-core_v5_transport_internet_tcp:Config": {
       "properties": {
         "headerSettings": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomAny"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPbAny"
         },
         "acceptProxyProtocol": {
           "type": "boolean"

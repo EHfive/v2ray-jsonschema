@@ -63,7 +63,7 @@ func DefaultAlterField(_ reflect.Type, f *reflect.StructField) bool {
 		f.Type = ToElemType((*CustomPortRange)(nil))
 
 	case ToElemType((*anypb.Any)(nil)):
-		f.Type = ToElemType((*CustomAny)(nil))
+		f.Type = ToElemType((*CustomPbAny)(nil))
 	}
 	return false
 }

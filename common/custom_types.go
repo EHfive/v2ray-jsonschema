@@ -5,10 +5,17 @@ import (
 	JS "github.com/invopop/jsonschema"
 )
 
-type CustomAny struct{}
+type CustomPbAny struct{}
 type CustomString struct{}
 type CustomStringList struct{}
 type CustomPortRange struct{}
+
+func (CustomPbAny) JSONSchema() *JS.Schema {
+	props := orderedmap.New()
+	props.Set("typeUrl", &JS.Schema{Type: "string", Pattern: "^types\\.v2fly\\.org/"})
+	props.Set("value", &JS.Schema{Type: "string", ContentEncoding: "base64"})
+	return &JS.Schema{Type: "object", Properties: props}
+}
 
 func (CustomString) JSONSchema() *JS.Schema {
 	return &JS.Schema{Type: "string"}
