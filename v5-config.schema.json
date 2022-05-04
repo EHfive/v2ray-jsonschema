@@ -455,13 +455,9 @@
         "type": {
           "enum": [
             "Full",
-            0,
             "Subdomain",
-            1,
             "Keyword",
-            2,
-            "Regex",
-            3
+            "Regex"
           ]
         },
         "domain": {
@@ -469,8 +465,7 @@
         },
         "ip": {
           "items": {
-            "type": "string",
-            "contentEncoding": "base64"
+            "type": "string"
           },
           "type": "array"
         },
@@ -506,11 +501,8 @@
         "queryStrategy": {
           "enum": [
             "USE_IP",
-            0,
             "USE_IP4",
-            1,
-            "USE_IP6",
-            2
+            "USE_IP6"
           ]
         },
         "disableFallback": {
@@ -570,13 +562,9 @@
         "type": {
           "enum": [
             "Full",
-            0,
             "Subdomain",
-            1,
             "Keyword",
-            2,
-            "Regex",
-            3
+            "Regex"
           ]
         },
         "domain": {
@@ -627,27 +615,18 @@
         "type": {
           "enum": [
             "None",
-            0,
             "Console",
-            1,
             "File",
-            2,
-            "Event",
-            3
+            "Event"
           ]
         },
         "level": {
           "enum": [
             "Unknown",
-            0,
             "Error",
-            1,
             "Warning",
-            2,
             "Info",
-            3,
-            "Debug",
-            4
+            "Debug"
           ]
         },
         "path": {
@@ -881,13 +860,9 @@
         "domainStrategy": {
           "enum": [
             "AsIs",
-            0,
             "UseIp",
-            1,
             "IpIfNonMatch",
-            2,
-            "IpOnDemand",
-            3
+            "IpOnDemand"
           ]
         },
         "rule": {
@@ -914,7 +889,7 @@
         },
         {
           "required": [
-            "balancing_tag"
+            "balancingTag"
           ]
         }
       ],
@@ -922,7 +897,7 @@
         "tag": {
           "type": "string"
         },
-        "balancing_tag": {
+        "balancingTag": {
           "type": "string"
         },
         "domain": {
@@ -1043,8 +1018,7 @@
     "github:v2fly_v2ray-core_v5_app_router_routercommon:CIDR": {
       "properties": {
         "ip": {
-          "type": "string",
-          "contentEncoding": "base64"
+          "type": "string"
         },
         "prefix": {
           "type": "integer"
@@ -1060,13 +1034,9 @@
         "type": {
           "enum": [
             "Plain",
-            0,
             "Regex",
-            1,
             "RootDomain",
-            2,
-            "Full",
-            3
+            "Full"
           ]
         },
         "value": {
@@ -1085,12 +1055,12 @@
       "oneOf": [
         {
           "required": [
-            "bool_value"
+            "boolValue"
           ]
         },
         {
           "required": [
-            "int_value"
+            "intValue"
           ]
         }
       ],
@@ -1098,10 +1068,10 @@
         "key": {
           "type": "string"
         },
-        "bool_value": {
+        "boolValue": {
           "type": "boolean"
         },
-        "int_value": {
+        "intValue": {
           "type": "integer"
         }
       },
@@ -1122,8 +1092,7 @@
           "type": "boolean"
         },
         "resourceHash": {
-          "type": "string",
-          "contentEncoding": "base64"
+          "type": "string"
         },
         "code": {
           "type": "string"
@@ -1146,8 +1115,7 @@
           "type": "array"
         },
         "resourceHash": {
-          "type": "string",
-          "contentEncoding": "base64"
+          "type": "string"
         },
         "code": {
           "type": "string"
@@ -1167,15 +1135,10 @@
         "network": {
           "enum": [
             "Unknown",
-            0,
             "RawTCP",
-            1,
             "TCP",
-            2,
             "UDP",
-            3,
-            "UNIX",
-            4
+            "UNIX"
           ]
         },
         "address": {
@@ -1428,9 +1391,7 @@
         "packetEncoding": {
           "enum": [
             "None",
-            0,
-            "Packet",
-            1
+            "Packet"
           ]
         }
       },
@@ -1458,9 +1419,7 @@
         "packetEncoding": {
           "enum": [
             "None",
-            0,
-            "Packet",
-            1
+            "Packet"
           ]
         }
       },
@@ -1706,23 +1665,17 @@
     "github:v2fly_v2ray-core_v5_transport_internet_tls:Certificate": {
       "properties": {
         "certificate": {
-          "type": "string",
-          "contentEncoding": "base64"
+          "type": "string"
         },
         "key": {
-          "type": "string",
-          "contentEncoding": "base64"
+          "type": "string"
         },
         "usage": {
           "enum": [
             "ENCIPHERMENT",
-            0,
             "AUTHORITY_VERIFY",
-            1,
             "AUTHORITY_ISSUE",
-            2,
-            "AUTHORITY_VERIFY_CLIENT",
-            3
+            "AUTHORITY_VERIFY_CLIENT"
           ]
         },
         "certificateFile": {
@@ -1762,8 +1715,7 @@
         },
         "pinnedPeerCertificateChainSha256": {
           "items": {
-            "type": "string",
-            "contentEncoding": "base64"
+            "type": "string"
           },
           "type": "array"
         },

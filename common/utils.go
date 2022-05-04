@@ -26,6 +26,8 @@ func NewDefaultReflector() JS.Reflector {
 	return JS.Reflector{
 		RequiredFromJSONSchemaTags: true,
 		AllowAdditionalProperties:  true,
+		DoNotSetContentType:        true,
+		IgnoreEnumNumber:           true,
 		Namer: func(t reflect.Type) string {
 			s := fmt.Sprintf("%v:%v", t.PkgPath(), t.Name())
 			s = strings.Replace(s, "github.com/", "github:", 1)
