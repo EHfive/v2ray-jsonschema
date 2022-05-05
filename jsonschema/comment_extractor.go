@@ -36,12 +36,12 @@ func ExtractGoComments(base, searchPath string, commentMap map[string]string) er
 			if err != nil {
 				return err
 			}
+			rel, err := filepath.Rel(searchPath, path)
+			if err != nil {
+				return err
+			}
 			for _, v := range d {
 				// paths may have multiple packages, like for tests
-				rel, err := filepath.Rel(searchPath, path)
-				if err != nil {
-					continue
-				}
 				k := gopath.Join(base, rel)
 				dict[k] = append(dict[k], v)
 			}
