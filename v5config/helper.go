@@ -8,7 +8,8 @@ import (
 )
 
 func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, interfaceType string, protocols []string) *JS.Schema {
-	allOf := C.BuildConditionalSchemaList(r, d, "protocol", "settings", interfaceType, protocols)
-	allOf = append(allOf, C.BuildBasicObjectSchema(r, d, t, []string{"protocol", "settings"}))
-	return &JS.Schema{AllOf: allOf}
+	idKey, configKey := "protocol", "settings"
+	allOf := C.BuildConditionalSchemaList(r, d, idKey, configKey, interfaceType, protocols)
+	allOf = append(allOf, C.BuildBasicObjectSchema(r, d, t, []string{idKey, configKey}))
+	return &JS.Schema{AllOf: allOf, Required: []string{idKey}}
 }

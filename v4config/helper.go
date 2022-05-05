@@ -38,8 +38,7 @@ var outboundPairs = []ConfigPair{
 }
 
 func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, configPairs []ConfigPair) *JS.Schema {
-	idKey := "protocol"
-	configKey := "settings"
+	idKey, configKey := "protocol", "settings"
 
 	var schemas []*JS.Schema
 	basicS := C.BuildBasicObjectSchema(r, d, t, []string{idKey, configKey})
@@ -49,5 +48,5 @@ func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, co
 		s := C.BuildConditionalItemSchema(r, d, idKey, configKey, pair.Name, C.ToElemType(pair.Interface))
 		schemas = append(schemas, s)
 	}
-	return &JS.Schema{AllOf: schemas}
+	return &JS.Schema{AllOf: schemas, Required: []string{idKey}}
 }
