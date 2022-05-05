@@ -73,6 +73,14 @@ func DefaultAlterField(_ reflect.Type, f *reflect.StructField) bool {
 	return false
 }
 
+func DefaultPostfixSchema(s *JS.Schema, format string) *JS.Schema {
+	s.Version = "http://json-schema.org/draft-07/schema"
+	s.Title = fmt.Sprintf("JSON schema for V2Ray %v configuration", format)
+	s.Description = fmt.Sprintf("JSON schema for V2Ray %v configuration format: https://github.com/v2fly/v2ray-core", format)
+	s.Comments = "Generated from https://github.com/EHfive/v2ray-jsonschema"
+	return s
+}
+
 func LoadTypeByAlias(interfaceType, name string) reflect.Type {
 	fsdef := envimpl.NewDefaultFileSystemDefaultImpl()
 	ctx := envctx.ContextWithEnvironment(context.TODO(), fsdef)

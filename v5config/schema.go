@@ -155,5 +155,6 @@ func customFields(t reflect.Type) []reflect.StructField {
 func JSONSchema(r JS.Reflector) *JS.Schema {
 	r.CustomFields = customFields
 	t := C.ToElemType((*v5cfg.RootConfig)(nil))
-	return r.ReflectFromType(t)
+	s := r.ReflectFromType(t)
+	return C.DefaultPostfixSchema(s, "jsonv5")
 }
