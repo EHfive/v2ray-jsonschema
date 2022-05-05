@@ -3,6 +3,16 @@
   "$id": "https://github.com/v2fly/v2ray-core/v5/infra/conf/v4/github:v2fly_v2ray-core_v5_infra_conf_v4:-config",
   "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Config",
   "$defs": {
+    "github:EHfive_v2ray-jsonschema_common:CustomCommonNumber": {
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomPortRange": {
       "oneOf": [
         {
@@ -29,6 +39,17 @@
         }
       ]
     },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomBlackholeConfigResponse": {
+      "properties": {
+        "type": {
+          "enum": [
+            "none",
+            "http"
+          ]
+        }
+      },
+      "type": "object"
+    },
     "github:EHfive_v2ray-jsonschema_v4config:CustomFakeDNSConfig": {
       "oneOf": [
         {
@@ -39,6 +60,16 @@
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:FakeDNSPoolElementConfig"
           },
           "type": "array"
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomHTTPRemoteConfigUser": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomUser"
+        },
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:HTTPAccount"
         }
       ]
     },
@@ -556,6 +587,16 @@
       },
       "type": "object"
     },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomSocksRemoteConfigUser": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomUser"
+        },
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:SocksAccount"
+        }
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_v4config:CustomStrategyConfig": {
       "allOf": [
         {
@@ -647,6 +688,37 @@
           "then": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Authenticator"
           }
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomUser": {
+      "properties": {
+        "level": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomVLessInOutboundConfigUser": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomUser"
+        },
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_proxy_vless:Account"
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomVMessInOutboundConfigUser": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomUser"
+        },
+        {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:VMessAccount"
         }
       ]
     },
@@ -1078,7 +1150,9 @@
     },
     "github:v2fly_v2ray-core_v5_infra_conf_v4:BlackholeConfig": {
       "properties": {
-        "response": true
+        "response": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomBlackholeConfigResponse"
+        }
       },
       "type": "object"
     },
@@ -1361,7 +1435,9 @@
           "type": "integer"
         },
         "users": {
-          "items": true,
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomHTTPRemoteConfigUser"
+          },
           "type": "array"
         }
       },
@@ -1707,7 +1783,9 @@
           "type": "integer"
         },
         "users": {
-          "items": true,
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomSocksRemoteConfigUser"
+          },
           "type": "array"
         }
       },
@@ -1864,7 +1942,9 @@
         "type": {
           "type": "string"
         },
-        "dest": true,
+        "dest": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomCommonNumber"
+        },
         "xver": {
           "type": "integer"
         }
@@ -1930,7 +2010,9 @@
     "github:v2fly_v2ray-core_v5_infra_conf_v4:VLessInboundConfig": {
       "properties": {
         "clients": {
-          "items": true,
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomVLessInOutboundConfigUser"
+          },
           "type": "array"
         },
         "decryption": {
@@ -1957,7 +2039,9 @@
         "type": {
           "type": "string"
         },
-        "dest": true,
+        "dest": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomCommonNumber"
+        },
         "xver": {
           "type": "integer"
         }
@@ -1984,8 +2068,27 @@
           "type": "integer"
         },
         "users": {
-          "items": true,
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomVLessInOutboundConfigUser"
+          },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_infra_conf_v4:VMessAccount": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "alterId": {
+          "type": "integer"
+        },
+        "security": {
+          "type": "string"
+        },
+        "experiments": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -2012,7 +2115,9 @@
     "github:v2fly_v2ray-core_v5_infra_conf_v4:VMessInboundConfig": {
       "properties": {
         "clients": {
-          "items": true,
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomVMessInOutboundConfigUser"
+          },
           "type": "array"
         },
         "features": {
@@ -2050,7 +2155,9 @@
           "type": "integer"
         },
         "users": {
-          "items": true,
+          "items": {
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomVMessInOutboundConfigUser"
+          },
           "type": "array"
         }
       },
@@ -2080,6 +2187,23 @@
         },
         "earlyDataHeaderName": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_proxy_vless:Account": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID of the account, in the form of a UUID, e.g., \"66ad4540-b58c-4ad2-9926-ea63445a9b57\"."
+        },
+        "flow": {
+          "type": "string",
+          "description": "Flow settings."
+        },
+        "encryption": {
+          "type": "string",
+          "description": "Encryption settings. Only applies to client side, and only accepts \"none\" for now."
         }
       },
       "type": "object"
