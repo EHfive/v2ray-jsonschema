@@ -353,10 +353,6 @@ func (r *Reflector) reflectTypeToSchemaWithID(defs Definitions, t reflect.Type) 
 	return s
 }
 
-func (r *Reflector) ReflectTypeToSchema(definitions Definitions, t reflect.Type) *Schema {
-	return r.reflectTypeToSchema(definitions, t)
-}
-
 func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type) *Schema {
 	if r.Mapper != nil {
 		if t := r.Mapper(t); t != nil {
