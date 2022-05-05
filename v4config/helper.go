@@ -15,6 +15,11 @@ type ConfigPair struct {
 	Interface interface{}
 }
 
+type CustomUser struct {
+	Level uint32 `json:"level"`
+	Email string `json:"email"`
+}
+
 var inboundPairs = []ConfigPair{
 	{"dokodemo-door", ((*v4.DokodemoConfig)(nil))},
 	{"http", ((*v4.HTTPServerConfig)(nil))},
@@ -60,4 +65,10 @@ func buildObjectEnumSchema(idKey string, enums []string) *JS.Schema {
 	props := orderedmap.New()
 	props.Set(idKey, s)
 	return &JS.Schema{Type: "object", Properties: props}
+}
+
+func buildUserWithAccountSchema(r *JS.Reflector, d JS.Definitions, ptr interface{}) *JS.Schema {
+	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
+	accountS := C.SchemaFromPtr(r, d, ptr)
+	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
 }

@@ -48,11 +48,6 @@ type CustomRouterRule struct {
 	Attributes string                 `json:"attrs"`
 }
 
-type CustomUser struct {
-	Level uint32 `json:"level"`
-	Email string `json:"email"`
-}
-
 func (CustomInboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	return buildInOutBoundSchema(r, d, C.ToElemType((*v4.InboundDetourConfig)(nil)), inboundPairs)
 }
@@ -124,27 +119,19 @@ func (CustomBlackholeConfigResponse) JSONSchema() *JS.Schema {
 }
 
 func (CustomHTTPRemoteConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
-	accountS := C.SchemaFromPtr(r, d, (*v4.HTTPAccount)(nil))
-	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
+	return buildUserWithAccountSchema(r, d, (*v4.HTTPAccount)(nil))
 }
 
 func (CustomSocksRemoteConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
-	accountS := C.SchemaFromPtr(r, d, (*v4.SocksAccount)(nil))
-	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
+	return buildUserWithAccountSchema(r, d, (*v4.SocksAccount)(nil))
 }
 
 func (CustomVLessInOutboundConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
-	accountS := C.SchemaFromPtr(r, d, (*vless.Account)(nil))
-	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
+	return buildUserWithAccountSchema(r, d, (*vless.Account)(nil))
 }
 
 func (CustomVMessInOutboundConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
-	accountS := C.SchemaFromPtr(r, d, (*v4.VMessAccount)(nil))
-	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
+	return buildUserWithAccountSchema(r, d, (*v4.VMessAccount)(nil))
 }
 
 func alterField(t reflect.Type, f *reflect.StructField) bool {
@@ -178,7 +165,7 @@ func alterField(t reflect.Type, f *reflect.StructField) bool {
 		fallthrough
 	case C.ToElemType((*v4.TrojanInboundFallback)(nil)):
 		if f.Name == "Dest" {
-			f.Type = C.ToElemType((*C.CustomCommonNumber)(nil))
+			f.Type = C.ToElemType((*C.CustomNumber)(nil))
 		}
 
 	case C.ToElemType((*v4.VLessInboundConfig)(nil)):

@@ -9,7 +9,7 @@ type CustomPbAny struct{}
 type CustomString struct{}
 type CustomStringList struct{}
 type CustomPortRange struct{}
-type CustomCommonNumber struct{}
+type CustomNumber struct{}
 
 func (CustomPbAny) JSONSchema() *JS.Schema {
 	props := orderedmap.New()
@@ -36,9 +36,8 @@ func (CustomPortRange) JSONSchema() *JS.Schema {
 	}}
 }
 
-func (CustomCommonNumber) JSONSchema() *JS.Schema {
+func (CustomNumber) JSONSchema() *JS.Schema {
 	return &JS.Schema{OneOf: []*JS.Schema{
 		{Type: "integer"},
-		{Type: "string"},
 	}}
 }
