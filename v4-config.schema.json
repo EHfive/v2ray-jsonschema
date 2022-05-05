@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "https://github.com/v2fly/v2ray-core/v5/infra/conf/v4/github:v2fly_v2ray-core_v5_infra_conf_v4:-config",
   "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Config",
   "$defs": {
@@ -207,6 +207,9 @@
             "type": "object"
           }
         }
+      ],
+      "required": [
+        "protocol"
       ]
     },
     "github:EHfive_v2ray-jsonschema_v4config:CustomKCPHeaderConfig": {
@@ -498,6 +501,9 @@
             "type": "object"
           }
         }
+      ],
+      "required": [
+        "protocol"
       ]
     },
     "github:EHfive_v2ray-jsonschema_v4config:CustomRouterRule": {
@@ -2078,5 +2084,8 @@
       },
       "type": "object"
     }
-  }
+  },
+  "$comment": "Generated from https://github.com/EHfive/v2ray-jsonschema",
+  "title": "JSON schema for V2Ray jsonv4 configuration",
+  "description": "JSON schema for V2Ray jsonv4 configuration format: https://github.com/v2fly/v2ray-core"
 }
