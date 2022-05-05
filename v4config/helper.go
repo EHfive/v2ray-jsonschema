@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	C "github.com/EHfive/v2ray-jsonschema/common"
+	"github.com/iancoleman/orderedmap"
 	JS "github.com/invopop/jsonschema"
 
 	v4 "github.com/v2fly/v2ray-core/v5/infra/conf/v4"
@@ -49,4 +50,14 @@ func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, co
 		schemas = append(schemas, s)
 	}
 	return &JS.Schema{AllOf: schemas, Required: []string{idKey}}
+}
+
+func buildObjectEnumSchema(idKey string, enums []string) *JS.Schema {
+	s := &JS.Schema{}
+	for _, name := range enums {
+		s.Enum = append(s.Enum, name)
+	}
+	props := orderedmap.New()
+	props.Set(idKey, s)
+	return &JS.Schema{Type: "object", Properties: props}
 }

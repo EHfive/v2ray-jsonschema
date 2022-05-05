@@ -95,6 +95,10 @@ func ToElemType(ptr interface{}) reflect.Type {
 	return reflect.TypeOf(ptr).Elem()
 }
 
+func SchemaFromPtr(r *JS.Reflector, d JS.Definitions, ptr interface{}) *JS.Schema {
+	return r.RefOrReflectTypeToSchema(d, ToElemType(ptr))
+}
+
 func BuildBasicObjectSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, excludes []string) *JS.Schema {
 	res := r.RefOrReflectTypeToSchema(d, t)
 	s := res

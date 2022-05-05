@@ -12,6 +12,7 @@ import (
 	"github.com/v2fly/v2ray-core/v5/infra/conf/synthetic/dns"
 	"github.com/v2fly/v2ray-core/v5/infra/conf/synthetic/router"
 	v4 "github.com/v2fly/v2ray-core/v5/infra/conf/v4"
+	"github.com/v2fly/v2ray-core/v5/proxy/vless"
 )
 
 type CustomFakeDNSConfig struct{}
@@ -24,6 +25,13 @@ type CustomTCPHeaderConfig struct{}
 type CustomKCPHeaderConfig struct{}
 type CustomMultiObservatoryItem struct{}
 type CustomStrategyConfig struct{}
+type CustomBlackholeConfigResponse struct{}
+type CustomHTTPRemoteConfigUser struct{}
+type CustomSocksRemoteConfigUser struct{}
+type CustomTrojanInboundFallbackDest struct{}
+type CustomVLessInOutboundConfigUser struct{}
+type CustomVLessInboundFallbackDest struct{}
+type CustomVMessInOutboundConfigUser struct{}
 
 type CustomRouterRule struct {
 	rule.RouterRule
@@ -38,6 +46,11 @@ type CustomRouterRule struct {
 	InboundTag *cfgcommon.StringList  `json:"inboundTag"`
 	Protocols  *cfgcommon.StringList  `json:"protocol"`
 	Attributes string                 `json:"attrs"`
+}
+
+type CustomUser struct {
+	Level uint32 `json:"level"`
+	Email string `json:"email"`
 }
 
 func (CustomInboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
@@ -59,7 +72,7 @@ func (CustomHostAddress) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sche
 func (CustomNameServerConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	return &JS.Schema{OneOf: []*JS.Schema{
 		{Type: "string"},
-		r.RefOrReflectTypeToSchema(d, C.ToElemType((*dns.NameServerConfig)(nil))),
+		C.SchemaFromPtr(r, d, (*dns.NameServerConfig)(nil)),
 	}}
 }
 
@@ -72,7 +85,7 @@ func (CustomTCPHeaderConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.
 
 	httpProps := orderedmap.New()
 	httpProps.Set("type", &JS.Schema{Const: "http"})
-	authS := r.RefOrReflectTypeToSchema(d, C.ToElemType((*v4.Authenticator)(nil)))
+	authS := C.SchemaFromPtr(r, d, (*v4.Authenticator)(nil))
 	httpS := &JS.Schema{
 		If:   &JS.Schema{Type: "object", Properties: httpProps},
 		Then: authS,
@@ -81,15 +94,9 @@ func (CustomTCPHeaderConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.
 	return &JS.Schema{AllOf: []*JS.Schema{noneS, httpS}}
 }
 
-func (CustomKCPHeaderConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+func (CustomKCPHeaderConfig) JSONSchema() *JS.Schema {
 	types := []string{"none", "srtp", "utp", "wechat-video", "dtls", "wireguard"}
-	s := &JS.Schema{}
-	for _, name := range types {
-		s.Enum = append(s.Enum, name)
-	}
-	props := orderedmap.New()
-	props.Set("type", s)
-	return &JS.Schema{Type: "object", Properties: props}
+	return buildObjectEnumSchema("type", types)
 }
 
 func (CustomMultiObservatoryItem) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
@@ -111,6 +118,35 @@ func (CustomStrategyConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 	return &JS.Schema{AllOf: C.BuildRouterStrategySchemaList(r, d, "type", "settings")}
 }
 
+func (CustomBlackholeConfigResponse) JSONSchema() *JS.Schema {
+	types := []string{"none", "http"}
+	return buildObjectEnumSchema("type", types)
+}
+
+func (CustomHTTPRemoteConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
+	accountS := C.SchemaFromPtr(r, d, (*v4.HTTPAccount)(nil))
+	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
+}
+
+func (CustomSocksRemoteConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
+	accountS := C.SchemaFromPtr(r, d, (*v4.SocksAccount)(nil))
+	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
+}
+
+func (CustomVLessInOutboundConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
+	accountS := C.SchemaFromPtr(r, d, (*vless.Account)(nil))
+	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
+}
+
+func (CustomVMessInOutboundConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	userS := C.SchemaFromPtr(r, d, (*CustomUser)(nil))
+	accountS := C.SchemaFromPtr(r, d, (*v4.VMessAccount)(nil))
+	return &JS.Schema{AllOf: []*JS.Schema{userS, accountS}}
+}
+
 func alterField(t reflect.Type, f *reflect.StructField) bool {
 	switch t {
 	case C.ToElemType((*v4.TCPConfig)(nil)):
@@ -124,6 +160,41 @@ func alterField(t reflect.Type, f *reflect.StructField) bool {
 	case C.ToElemType((*v4.QUICConfig)(nil)):
 		if f.Name == "Header" {
 			f.Type = C.ToElemType((*CustomKCPHeaderConfig)(nil))
+		}
+	case C.ToElemType((*v4.BlackholeConfig)(nil)):
+		if f.Name == "Response" {
+			f.Type = C.ToElemType((*CustomBlackholeConfigResponse)(nil))
+		}
+	case C.ToElemType((*v4.HTTPRemoteConfig)(nil)):
+		if f.Name == "Users" {
+			f.Type = reflect.TypeOf(([]CustomHTTPRemoteConfigUser)(nil))
+		}
+	case C.ToElemType((*v4.SocksRemoteConfig)(nil)):
+		if f.Name == "Users" {
+			f.Type = reflect.TypeOf(([]CustomSocksRemoteConfigUser)(nil))
+		}
+
+	case C.ToElemType((*v4.VLessInboundFallback)(nil)):
+		fallthrough
+	case C.ToElemType((*v4.TrojanInboundFallback)(nil)):
+		if f.Name == "Dest" {
+			f.Type = C.ToElemType((*C.CustomCommonNumber)(nil))
+		}
+
+	case C.ToElemType((*v4.VLessInboundConfig)(nil)):
+		if f.Name == "Clients" {
+			f.Type = reflect.TypeOf(([]CustomVLessInOutboundConfigUser)(nil))
+		}
+	case C.ToElemType((*v4.VLessOutboundVnext)(nil)):
+		if f.Name == "Users" {
+			f.Type = reflect.TypeOf(([]CustomVLessInOutboundConfigUser)(nil))
+		}
+
+	case C.ToElemType((*v4.VMessInboundConfig)(nil)):
+		fallthrough
+	case C.ToElemType((*v4.VMessOutboundTarget)(nil)):
+		if f.Name == "Users" {
+			f.Type = reflect.TypeOf(([]CustomVMessInOutboundConfigUser)(nil))
 		}
 	}
 
