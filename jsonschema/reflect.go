@@ -199,8 +199,6 @@ type Reflector struct {
 
 	IgnoreEnumNumber bool
 
-	DoNotSetContentType bool
-
 	// Lookup allows a function to be defined that will provide a custom mapping of
 	// types to Schema IDs. This allows existing schema documents to be referenced
 	// by their ID instead of being embedded into the current schema definitions.
@@ -440,10 +438,10 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 		if t.Kind() == reflect.Slice && t.Elem() == byteSliceType.Elem() {
 			returnType.Type = "string"
 			// NOTE: ContentMediaType is not set here
-			if !r.DoNotSetContentType {
-				returnType.ContentEncoding = "base64"
-			}
-			return returnType
+			return &Schema{OneOf: []*Schema{
+				{Type: "string", ContentEncoding: "base64"},
+				{Type: "array", Items: &Schema{Type: "integer"}},
+			}}
 		}
 		returnType.Type = "array"
 		returnType.Items = r.refOrReflectTypeToSchema(definitions, t.Elem())
