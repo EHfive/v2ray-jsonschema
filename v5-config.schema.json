@@ -722,7 +722,18 @@
         },
         "ip": {
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string",
+                "contentEncoding": "base64"
+              },
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              }
+            ]
           },
           "type": "array"
         },
@@ -1301,7 +1312,18 @@
     "github:v2fly_v2ray-core_v5_app_router_routercommon:CIDR": {
       "properties": {
         "ip": {
-          "type": "string",
+          "oneOf": [
+            {
+              "type": "string",
+              "contentEncoding": "base64"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ],
           "description": "IP address, should be either 4 or 16 bytes."
         },
         "prefix": {
@@ -1382,7 +1404,18 @@
           "type": "boolean"
         },
         "resourceHash": {
-          "type": "string",
+          "oneOf": [
+            {
+              "type": "string",
+              "contentEncoding": "base64"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ],
           "description": "resource_hash instruct simplified config converter to load domain from geo file."
         },
         "code": {
@@ -1406,7 +1439,18 @@
           "type": "array"
         },
         "resourceHash": {
-          "type": "string",
+          "oneOf": [
+            {
+              "type": "string",
+              "contentEncoding": "base64"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ],
           "description": "resource_hash instruct simplified config converter to load domain from geo file."
         },
         "code": {
@@ -1965,11 +2009,33 @@
     "github:v2fly_v2ray-core_v5_transport_internet_tls:Certificate": {
       "properties": {
         "certificate": {
-          "type": "string",
+          "oneOf": [
+            {
+              "type": "string",
+              "contentEncoding": "base64"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ],
           "description": "TLS certificate in x509 format."
         },
         "key": {
-          "type": "string",
+          "oneOf": [
+            {
+              "type": "string",
+              "contentEncoding": "base64"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ],
           "description": "TLS key in x509 format."
         },
         "usage": {
@@ -2023,7 +2089,18 @@
         },
         "pinnedPeerCertificateChainSha256": {
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string",
+                "contentEncoding": "base64"
+              },
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              }
+            ]
           },
           "type": "array",
           "description": "@Document A pinned certificate chain sha256 hash.\n@Document If the server's hash does not match this value, the connection will be aborted.\n@Document This value replace allow_insecure.\n@Critical"
