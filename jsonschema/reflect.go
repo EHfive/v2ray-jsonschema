@@ -436,7 +436,6 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 			returnType.MaxItems = returnType.MinItems
 		}
 		if t.Kind() == reflect.Slice && t.Elem() == byteSliceType.Elem() {
-			returnType.Type = "string"
 			// NOTE: ContentMediaType is not set here
 			return &Schema{OneOf: []*Schema{
 				{Type: "string", ContentEncoding: "base64"},
