@@ -26,7 +26,6 @@ func NewDefaultReflector() JS.Reflector {
 	r := JS.Reflector{
 		RequiredFromJSONSchemaTags: true,
 		AllowAdditionalProperties:  true,
-		DoNotSetContentType:        true,
 		IgnoreEnumNumber:           true,
 		Namer: func(t reflect.Type) string {
 			s := fmt.Sprintf("%v:%v", t.PkgPath(), t.Name())
