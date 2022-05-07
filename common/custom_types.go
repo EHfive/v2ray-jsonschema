@@ -37,7 +37,5 @@ func (CustomPortRange) JSONSchema() *JS.Schema {
 }
 
 func (CustomNumber) JSONSchema() *JS.Schema {
-	return &JS.Schema{OneOf: []*JS.Schema{
-		{Type: "integer"},
-	}}
+	return &JS.Schema{Type: "integer"}
 }
