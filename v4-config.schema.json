@@ -4,11 +4,7 @@
   "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Config",
   "$defs": {
     "github:EHfive_v2ray-jsonschema_common:CustomNumber": {
-      "oneOf": [
-        {
-          "type": "integer"
-        }
-      ]
+      "type": "integer"
     },
     "github:EHfive_v2ray-jsonschema_common:CustomPortRange": {
       "oneOf": [
@@ -1109,10 +1105,7 @@
         "headers": {
           "patternProperties": {
             ".*": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
+              "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
             }
           },
           "type": "object"
@@ -1134,10 +1127,7 @@
         "headers": {
           "patternProperties": {
             ".*": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
+              "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
             }
           },
           "type": "object"
@@ -1197,11 +1187,11 @@
           "description": "Port of this Point server.\nDeprecated: Port exists for historical compatibility\nand should not be used."
         },
         "inbound": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourConfig",
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomInboundConfig",
           "description": "Deprecated: InboundConfig exists for historical compatibility\nand should not be used."
         },
         "outbound": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:OutboundDetourConfig",
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomOutboundConfig",
           "description": "Deprecated: OutboundConfig exists for historical compatibility\nand should not be used."
         },
         "inboundDetour": {
@@ -1412,10 +1402,7 @@
         "headers": {
           "patternProperties": {
             ".*": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
+              "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
             }
           },
           "type": "object"
