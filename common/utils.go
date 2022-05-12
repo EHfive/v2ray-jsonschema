@@ -2,82 +2,17 @@ package common
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"log"
 	"reflect"
-	"strings"
-
-	"github.com/iancoleman/orderedmap"
-	JS "github.com/invopop/jsonschema"
-	"github.com/stoewer/go-strcase"
-
-	"github.com/v2fly/v2ray-core/v5/common/net"
-	"github.com/v2fly/v2ray-core/v5/infra/conf/cfgcommon"
-	"github.com/v2fly/v2ray-core/v5/infra/conf/cfgcommon/duration"
-
-	"google.golang.org/protobuf/types/known/anypb"
 
 	"github.com/v2fly/v2ray-core/v5/common/environment/envctx"
 	"github.com/v2fly/v2ray-core/v5/common/environment/envimpl"
 	"github.com/v2fly/v2ray-core/v5/common/registry"
 )
 
-func NewDefaultReflector() JS.Reflector {
-	r := JS.Reflector{
-		RequiredFromJSONSchemaTags: true,
-		AllowAdditionalProperties:  true,
-		IgnoreEnumNumber:           true,
-		Namer: func(t reflect.Type) string {
-			s := fmt.Sprintf("%v:%v", t.PkgPath(), t.Name())
-			s = strings.Replace(s, "github.com/", "github:", 1)
-			s = strings.ReplaceAll(s, "/", "_")
-			return s
-		},
-		Mapper: func(t reflect.Type) *JS.Schema {
-			return nil
-		},
-		KeyNamer: strcase.LowerCamelCase,
-	}
-
-	r.AddGoComments("github.com/v2fly/v2ray-core/v5", "./vendor/github.com/v2fly/v2ray-core/v5")
-	return r
-}
-
-func DefaultAlterField(_ reflect.Type, f *reflect.StructField) bool {
-	matchType := f.Type
-	if matchType.Kind() == reflect.Ptr {
-		matchType = f.Type.Elem()
-	}
-	switch matchType {
-	case ToElemType((*net.IPOrDomain)(nil)):
-		fallthrough
-	case ToElemType((*cfgcommon.Address)(nil)):
-		fallthrough
-	case ToElemType((*duration.Duration)(nil)):
-		f.Type = ToElemType((*CustomString)(nil))
-
-	case ToElemType((*cfgcommon.StringList)(nil)):
-		fallthrough
-	case ToElemType((*cfgcommon.NetworkList)(nil)):
-		f.Type = ToElemType((*CustomStringList)(nil))
-
-	case ToElemType((*cfgcommon.PortList)(nil)):
-		fallthrough
-	case ToElemType((*cfgcommon.PortRange)(nil)):
-		f.Type = ToElemType((*CustomPortRange)(nil))
-
-	case ToElemType((*anypb.Any)(nil)):
-		f.Type = ToElemType((*CustomPbAny)(nil))
-	}
-	return false
-}
-
-func DefaultPostfixSchema(s *JS.Schema, format string) *JS.Schema {
-	s.Version = "http://json-schema.org/draft-07/schema"
-	s.Title = fmt.Sprintf("JSON schema for V2Ray %v configuration", format)
-	s.Description = fmt.Sprintf("JSON schema for V2Ray %v configuration format: https://github.com/v2fly/v2ray-core", format)
-	s.Comments = "Generated from https://github.com/EHfive/v2ray-jsonschema"
-	return s
+func ToElemType(ptr interface{}) reflect.Type {
+	return reflect.TypeOf(ptr).Elem()
 }
 
 func LoadTypeByAlias(interfaceType, name string) reflect.Type {
@@ -90,61 +25,59 @@ func LoadTypeByAlias(interfaceType, name string) reflect.Type {
 	return reflect.TypeOf(msg).Elem()
 }
 
-func ToElemType(ptr interface{}) reflect.Type {
-	return reflect.TypeOf(ptr).Elem()
-}
+var rawMessageType = reflect.TypeOf(json.RawMessage{})
 
-func SchemaFromPtr(r *JS.Reflector, d JS.Definitions, ptr interface{}) *JS.Schema {
-	return r.RefOrReflectTypeToSchema(d, ToElemType(ptr))
-}
-
-func BuildBasicObjectSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, excludes []string) *JS.Schema {
-	res := r.RefOrReflectTypeToSchema(d, t)
-	s := res
-	if s.Ref != "" {
-		defName := strings.Replace(s.Ref, "#/$defs/", "", 1)
-		s = d[defName]
+func ReplaceTypeElem(holder reflect.Type, oldElem reflect.Type, newElem reflect.Type) (reflect.Type, bool) {
+	var r func(reflect.Type) reflect.Type
+	replaced := false
+	r = func(t reflect.Type) reflect.Type {
+		if t == oldElem {
+			replaced = true
+			return newElem
+		}
+		switch t.Kind() {
+		case reflect.Array:
+			return reflect.ArrayOf(t.Len(), r(t.Elem()))
+		case reflect.Slice:
+			if t == rawMessageType {
+				break
+			}
+			return reflect.SliceOf(r(t.Elem()))
+		case reflect.Map:
+			return reflect.MapOf(t.Key(), r(t.Elem()))
+		case reflect.Chan:
+			return reflect.ChanOf(t.ChanDir(), r(t.Elem()))
+		case reflect.Ptr:
+			return r(t.Elem())
+		}
+		if oldElem == nil {
+			replaced = true
+			return newElem
+		}
+		return t
 	}
-	for _, name := range excludes {
-		s.Properties.Delete(name)
+	return r(holder), replaced
+}
+
+type ReplaceTypePair [2]interface{}
+
+func ReplaceTypeElemByPairs(holder reflect.Type, pairs []ReplaceTypePair) (reflect.Type, bool) {
+	for _, pair := range pairs {
+		t, ok := ReplaceTypeElem(holder, ToElemType(pair[0]), ToElemType(pair[1]))
+		if ok {
+			return t, true
+		}
 	}
-	return res
+	return holder, false
 }
 
-func BuildIfThenObjectSchema(ifKey string, ifName string, thenKey string, thenSchema *JS.Schema) *JS.Schema {
-	ifProps := orderedmap.New()
-	ifProps.Set(ifKey, &JS.Schema{Const: ifName})
-	thenProps := orderedmap.New()
-	thenProps.Set(thenKey, thenSchema)
-	return &JS.Schema{
-		If:   &JS.Schema{Type: "object", Properties: ifProps, Required: []string{ifKey}},
-		Then: &JS.Schema{Type: "object", Properties: thenProps},
+type ReplaceFieldTypePair [3]interface{}
+
+func ReplaceFieldTypeElemByPairs(holder reflect.Type, field reflect.StructField, pairs []ReplaceFieldTypePair) (reflect.Type, bool) {
+	for _, pair := range pairs {
+		if pair[1].(string) == field.Name && holder == ToElemType(pair[0]) {
+			return ReplaceTypeElem(field.Type, nil, ToElemType(pair[2]))
+		}
 	}
-}
-
-func BuildConditionalItemSchema(r *JS.Reflector, d JS.Definitions, idKey string, configKey string, idName string, nodeType reflect.Type) *JS.Schema {
-	return BuildIfThenObjectSchema(idKey, idName, configKey, r.RefOrReflectTypeToSchema(d, nodeType))
-}
-
-func BuildConditionalSchemaList(r *JS.Reflector, d JS.Definitions, idKey string, configKey string, interfaceType string, shortNames []string) []*JS.Schema {
-	var schemas []*JS.Schema
-	for _, name := range shortNames {
-		s := BuildConditionalItemSchema(r, d, idKey, configKey, name, LoadTypeByAlias(interfaceType, name))
-		schemas = append(schemas, s)
-	}
-	return schemas
-}
-
-func BuildSingleOrArraySchema(r *JS.Reflector, d JS.Definitions, t reflect.Type) *JS.Schema {
-	s := r.RefOrReflectTypeToSchema(d, t)
-	return &JS.Schema{OneOf: []*JS.Schema{
-		s,
-		{Type: "array", Items: s},
-	}}
-}
-
-func BuildRouterStrategySchemaList(r *JS.Reflector, d JS.Definitions, idKey string, configKey string) []*JS.Schema {
-	return BuildConditionalSchemaList(r, d, idKey, configKey, "balancer", []string{
-		"random", "leastping", "leastload",
-	})
+	return field.Type, false
 }

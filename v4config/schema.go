@@ -28,9 +28,7 @@ type CustomStrategyConfig struct{}
 type CustomBlackholeConfigResponse struct{}
 type CustomHTTPRemoteConfigUser struct{}
 type CustomSocksRemoteConfigUser struct{}
-type CustomTrojanInboundFallbackDest struct{}
 type CustomVLessInOutboundConfigUser struct{}
-type CustomVLessInboundFallbackDest struct{}
 type CustomVMessInOutboundConfigUser struct{}
 
 type CustomRouterRule struct {
@@ -134,90 +132,42 @@ func (CustomVMessInOutboundConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definit
 	return buildUserWithAccountSchema(r, d, (*v4.VMessAccount)(nil))
 }
 
+var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
+	{(*v4.TCPConfig)(nil), "HeaderConfig", (*CustomTCPHeaderConfig)(nil)},
+	{(*v4.KCPConfig)(nil), "HeaderConfig", (*CustomKCPHeaderConfig)(nil)},
+	{(*v4.QUICConfig)(nil), "Header", (*CustomKCPHeaderConfig)(nil)},
+	{(*v4.BlackholeConfig)(nil), "Response", (*CustomBlackholeConfigResponse)(nil)},
+	{(*v4.HTTPRemoteConfig)(nil), "Users", (*CustomHTTPRemoteConfigUser)(nil)},
+	{(*v4.SocksRemoteConfig)(nil), "Users", (*CustomSocksRemoteConfigUser)(nil)},
+	{(*v4.VLessInboundFallback)(nil), "Dest", (*C.CustomNumber)(nil)},
+	{(*v4.TrojanInboundFallback)(nil), "Dest", (*C.CustomNumber)(nil)},
+	{(*v4.VLessInboundConfig)(nil), "Clients", (*CustomVLessInOutboundConfigUser)(nil)},
+	{(*v4.VLessOutboundVnext)(nil), "Users", (*CustomVLessInOutboundConfigUser)(nil)},
+	{(*v4.VMessInboundConfig)(nil), "Users", (*CustomVMessInOutboundConfigUser)(nil)},
+	{(*v4.VMessOutboundTarget)(nil), "Users", (*CustomVMessInOutboundConfigUser)(nil)},
+	{(*router.RouterConfig)(nil), "RuleList", (*CustomRouterRule)(nil)},
+	{(*router.RouterRulesConfig)(nil), "RuleList", (*CustomRouterRule)(nil)},
+}
+
+var replaceTypePairs []C.ReplaceTypePair = []C.ReplaceTypePair{
+	{(*v4.InboundDetourConfig)(nil), (*CustomInboundConfig)(nil)},
+	{(*v4.OutboundDetourConfig)(nil), (*CustomOutboundConfig)(nil)},
+	{(*v4.MultiObservatoryItem)(nil), (*CustomMultiObservatoryItem)(nil)},
+	{(*v4.FakeDNSConfig)(nil), (*CustomFakeDNSConfig)(nil)},
+	{(*router.StrategyConfig)(nil), (*CustomStrategyConfig)(nil)},
+	{(*dns.HostAddress)(nil), (*CustomHostAddress)(nil)},
+	{(*dns.NameServerConfig)(nil), (*CustomNameServerConfig)(nil)},
+}
+
 func alterField(t reflect.Type, f *reflect.StructField) bool {
-	switch t {
-	case C.ToElemType((*v4.TCPConfig)(nil)):
-		if f.Name == "HeaderConfig" {
-			f.Type = C.ToElemType((*CustomTCPHeaderConfig)(nil))
-		}
-	case C.ToElemType((*v4.KCPConfig)(nil)):
-		if f.Name == "HeaderConfig" {
-			f.Type = C.ToElemType((*CustomKCPHeaderConfig)(nil))
-		}
-	case C.ToElemType((*v4.QUICConfig)(nil)):
-		if f.Name == "Header" {
-			f.Type = C.ToElemType((*CustomKCPHeaderConfig)(nil))
-		}
-	case C.ToElemType((*v4.BlackholeConfig)(nil)):
-		if f.Name == "Response" {
-			f.Type = C.ToElemType((*CustomBlackholeConfigResponse)(nil))
-		}
-	case C.ToElemType((*v4.HTTPRemoteConfig)(nil)):
-		if f.Name == "Users" {
-			f.Type = reflect.TypeOf(([]CustomHTTPRemoteConfigUser)(nil))
-		}
-	case C.ToElemType((*v4.SocksRemoteConfig)(nil)):
-		if f.Name == "Users" {
-			f.Type = reflect.TypeOf(([]CustomSocksRemoteConfigUser)(nil))
-		}
-
-	case C.ToElemType((*v4.VLessInboundFallback)(nil)):
-		fallthrough
-	case C.ToElemType((*v4.TrojanInboundFallback)(nil)):
-		if f.Name == "Dest" {
-			f.Type = C.ToElemType((*C.CustomNumber)(nil))
-		}
-
-	case C.ToElemType((*v4.VLessInboundConfig)(nil)):
-		if f.Name == "Clients" {
-			f.Type = reflect.TypeOf(([]CustomVLessInOutboundConfigUser)(nil))
-		}
-	case C.ToElemType((*v4.VLessOutboundVnext)(nil)):
-		if f.Name == "Users" {
-			f.Type = reflect.TypeOf(([]CustomVLessInOutboundConfigUser)(nil))
-		}
-
-	case C.ToElemType((*v4.VMessInboundConfig)(nil)):
-		fallthrough
-	case C.ToElemType((*v4.VMessOutboundTarget)(nil)):
-		if f.Name == "Users" {
-			f.Type = reflect.TypeOf(([]CustomVMessInOutboundConfigUser)(nil))
-		}
+	if newF, ok := C.ReplaceFieldTypeElemByPairs(t, *f, replaceFieldTypePairs); ok {
+		f.Type = newF
+		return false
 	}
 
-	switch t {
-	case C.ToElemType((*router.RouterConfig)(nil)):
-		fallthrough
-	case C.ToElemType((*router.RouterRulesConfig)(nil)):
-		if f.Name == "RuleList" {
-			f.Type = reflect.TypeOf(([]CustomRouterRule)(nil))
-		}
-	}
-
-	matchType := f.Type
-	if matchType.Kind() == reflect.Ptr {
-		matchType = f.Type.Elem()
-	}
-	switch matchType {
-	case reflect.TypeOf((*v4.InboundDetourConfig)(nil)):
-		f.Type = reflect.TypeOf((*CustomInboundConfig)(nil))
-	case reflect.TypeOf((*v4.OutboundDetourConfig)(nil)):
-		f.Type = reflect.TypeOf((*CustomOutboundConfig)(nil))
-	case reflect.TypeOf(([]v4.InboundDetourConfig)(nil)):
-		f.Type = reflect.TypeOf(([]CustomInboundConfig)(nil))
-	case reflect.TypeOf(([]v4.OutboundDetourConfig)(nil)):
-		f.Type = reflect.TypeOf(([]CustomOutboundConfig)(nil))
-
-	case reflect.TypeOf(([]v4.MultiObservatoryItem)(nil)):
-		f.Type = reflect.TypeOf(([]CustomMultiObservatoryItem)(nil))
-	case C.ToElemType((*v4.FakeDNSConfig)(nil)):
-		f.Type = C.ToElemType((*CustomFakeDNSConfig)(nil))
-	case C.ToElemType((*router.StrategyConfig)(nil)):
-		f.Type = C.ToElemType((*CustomStrategyConfig)(nil))
-	case reflect.TypeOf((map[string]*dns.HostAddress)(nil)):
-		f.Type = reflect.TypeOf((map[string]CustomHostAddress)(nil))
-	case reflect.TypeOf(([]*dns.NameServerConfig)(nil)):
-		f.Type = reflect.TypeOf(([]CustomNameServerConfig)(nil))
+	if newF, ok := C.ReplaceTypeElemByPairs(f.Type, replaceTypePairs); ok {
+		f.Type = newF
+		return false
 	}
 
 	return C.DefaultAlterField(t, f)
@@ -240,5 +190,5 @@ func JSONSchema(r JS.Reflector) *JS.Schema {
 	r.CustomFields = customFields
 	t := C.ToElemType((*v4.Config)(nil))
 	s := r.ReflectFromType(t)
-	return C.DefaultPostfixSchema(s, "jsonv4")
+	return C.DefaultPostFixSchema(s, "jsonv4")
 }

@@ -1,7 +1,6 @@
 package v5config
 
 import (
-	"log"
 	"reflect"
 
 	C "github.com/EHfive/v2ray-jsonschema/common"
@@ -102,38 +101,35 @@ func (CustomBalancingRule) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sc
 	return &JS.Schema{AllOf: allOf}
 }
 
+var replaceTypePairs []C.ReplaceTypePair = []C.ReplaceTypePair{
+	{(*v5cfg.InboundConfig)(nil), (*CustomInboundConfig)(nil)},
+	{(*v5cfg.OutboundConfig)(nil), (*CustomOutboundConfig)(nil)},
+	{(*v5cfg.StreamConfig)(nil), (*CustomStreamSettings)(nil)},
+	{(*router.BalancingRule)(nil), (*CustomBalancingRule)(nil)},
+}
+
 func alterField(t reflect.Type, f *reflect.StructField) bool {
 	switch t {
 	case C.ToElemType((*v5cfg.RootConfig)(nil)):
 		switch f.Name {
 		case "LogConfig":
 			f.Type = C.LoadTypeByAlias("service", "log")
+			return false
 		case "DNSConfig":
 			f.Type = C.LoadTypeByAlias("service", "dns")
+			return false
 		case "RouterConfig":
 			f.Type = C.LoadTypeByAlias("service", "router")
-		case "Inbounds":
-			f.Type = reflect.TypeOf(([]CustomInboundConfig)(nil))
-		case "Outbounds":
-			f.Type = reflect.TypeOf(([]CustomOutboundConfig)(nil))
+			return false
 		case "Services":
 			f.Type = C.ToElemType((*CustomServices)(nil))
+			return false
 		}
 	}
 
-	matchType := f.Type
-	if matchType.Kind() == reflect.Ptr {
-		matchType = f.Type.Elem()
-	}
-	switch matchType {
-	case C.ToElemType((*v5cfg.StreamConfig)(nil)):
-		f.Type = C.ToElemType((*CustomStreamSettings)(nil))
-	case reflect.TypeOf(([]*router.BalancingRule)(nil)):
-		f.Type = reflect.TypeOf(([]*CustomBalancingRule)(nil))
-	}
-
-	if t.Name() == "router.RoutingRule" {
-		log.Println(t, f)
+	if newF, ok := C.ReplaceTypeElemByPairs(f.Type, replaceTypePairs); ok {
+		f.Type = newF
+		return false
 	}
 
 	return C.DefaultAlterField(t, f)
@@ -156,5 +152,5 @@ func JSONSchema(r JS.Reflector) *JS.Schema {
 	r.CustomFields = customFields
 	t := C.ToElemType((*v5cfg.RootConfig)(nil))
 	s := r.ReflectFromType(t)
-	return C.DefaultPostfixSchema(s, "jsonv5")
+	return C.DefaultPostFixSchema(s, "jsonv5")
 }
