@@ -641,6 +641,27 @@
           "if": {
             "properties": {
               "transport": {
+                "const": "quic"
+              }
+            },
+            "type": "object",
+            "required": [
+              "transport"
+            ]
+          },
+          "then": {
+            "properties": {
+              "transportSettings": {
+                "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_quic:Config"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "transport": {
                 "const": "ws"
               }
             },
@@ -1487,6 +1508,22 @@
       "type": "object",
       "description": "Endpoint of a network connection."
     },
+    "github:v2fly_v2ray-core_v5_common_protocol:SecurityConfig": {
+      "properties": {
+        "type": {
+          "enum": [
+            "UNKNOWN",
+            "LEGACY",
+            "AUTO",
+            "AES128_GCM",
+            "CHACHA20_POLY1305",
+            "NONE",
+            "ZERO"
+          ]
+        }
+      },
+      "type": "object"
+    },
     "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig": {
       "properties": {
         "enabled": {
@@ -1991,6 +2028,20 @@
         "size": {
           "type": "integer",
           "description": "Buffer size in bytes."
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_quic:Config": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "security": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_protocol:SecurityConfig"
+        },
+        "header": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPbAny"
         }
       },
       "type": "object"

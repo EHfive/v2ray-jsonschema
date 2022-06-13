@@ -53,7 +53,7 @@ func (CustomStreamSettings) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 		"transport", "transportSettings", "security", "securitySettings",
 	})
 	transportSList := C.BuildConditionalSchemaList(r, d, "transport", "transportSettings", "transport", []string{
-		"grpc", "kcp", "tcp", "ws",
+		"grpc", "kcp", "tcp", "quic", "ws",
 	})
 	securitySList := C.BuildConditionalSchemaList(r, d, "security", "securitySettings", "security", []string{
 		"tls",
@@ -135,8 +135,7 @@ func alterField(t reflect.Type, f *reflect.StructField) bool {
 	return C.DefaultAlterField(t, f)
 }
 
-func customFields(t reflect.Type) []reflect.StructField {
-	var fields []reflect.StructField
+func customFields(t reflect.Type) (fields []reflect.StructField) {
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
 		skip := alterField(t, &f)
@@ -145,7 +144,7 @@ func customFields(t reflect.Type) []reflect.StructField {
 		}
 		fields = append(fields, f)
 	}
-	return fields
+	return
 }
 
 func JSONSchema(r JS.Reflector) *JS.Schema {
