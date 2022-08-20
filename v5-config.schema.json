@@ -3,6 +3,25 @@
   "$id": "https://github.com/v2fly/v2ray-core/v5/infra/conf/v5cfg/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:-root-config",
   "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:RootConfig",
   "$defs": {
+    "github:EHfive_v2ray-jsonschema_common:CustomNetworkList": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "items": {
+            "enum": [
+              "Unknown",
+              "RawTCP",
+              "TCP",
+              "UDP",
+              "UNIX"
+            ]
+          },
+          "type": "array"
+        }
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomPbAny": {
       "properties": {
         "typeUrl": {
@@ -1222,7 +1241,7 @@
           "description": "List of ports."
         },
         "networks": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_net:NetworkList",
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomNetworkList",
           "description": "List of networks for matching."
         },
         "sourceGeoip": {
@@ -1508,24 +1527,6 @@
       "type": "object",
       "description": "Endpoint of a network connection."
     },
-    "github:v2fly_v2ray-core_v5_common_net:NetworkList": {
-      "properties": {
-        "network": {
-          "items": {
-            "enum": [
-              "Unknown",
-              "RawTCP",
-              "TCP",
-              "UDP",
-              "UNIX"
-            ]
-          },
-          "type": "array"
-        }
-      },
-      "type": "object",
-      "description": "NetworkList is a list of Networks."
-    },
     "github:v2fly_v2ray-core_v5_common_protocol:SecurityConfig": {
       "properties": {
         "type": {
@@ -1714,7 +1715,7 @@
           "type": "integer"
         },
         "networks": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_net:NetworkList"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomNetworkList"
         },
         "followRedirect": {
           "type": "boolean"
@@ -1790,7 +1791,7 @@
           "type": "string"
         },
         "networks": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_net:NetworkList"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomNetworkList"
         },
         "packetEncoding": {
           "enum": [

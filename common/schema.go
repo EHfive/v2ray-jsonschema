@@ -45,6 +45,7 @@ var replaceTypePairs []ReplaceTypePair = []ReplaceTypePair{
 	{(*cfgcommon.NetworkList)(nil), (*CustomStringList)(nil)},
 	{(*cfgcommon.PortList)(nil), (*CustomPortRange)(nil)},
 	{(*cfgcommon.PortRange)(nil), (*CustomPortRange)(nil)},
+	{(*net.NetworkList)(nil), (*CustomNetworkList)(nil)},
 	{(*anypb.Any)(nil), (*CustomPbAny)(nil)},
 }
 
