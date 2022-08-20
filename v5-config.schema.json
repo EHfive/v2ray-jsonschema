@@ -1222,7 +1222,7 @@
           "description": "List of ports."
         },
         "networks": {
-          "type": "string",
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_net:NetworkList",
           "description": "List of networks for matching."
         },
         "sourceGeoip": {
@@ -1508,6 +1508,24 @@
       "type": "object",
       "description": "Endpoint of a network connection."
     },
+    "github:v2fly_v2ray-core_v5_common_net:NetworkList": {
+      "properties": {
+        "network": {
+          "items": {
+            "enum": [
+              "Unknown",
+              "RawTCP",
+              "TCP",
+              "UDP",
+              "UNIX"
+            ]
+          },
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "description": "NetworkList is a list of Networks."
+    },
     "github:v2fly_v2ray-core_v5_common_protocol:SecurityConfig": {
       "properties": {
         "type": {
@@ -1695,8 +1713,8 @@
         "port": {
           "type": "integer"
         },
-        "network": {
-          "type": "string"
+        "networks": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_net:NetworkList"
         },
         "followRedirect": {
           "type": "boolean"
@@ -1740,7 +1758,13 @@
           "type": "integer"
         },
         "method": {
-          "type": "string"
+          "enum": [
+            "UNKNOWN",
+            "AES_128_GCM",
+            "AES_256_GCM",
+            "CHACHA20_POLY1305",
+            "NONE"
+          ]
         },
         "password": {
           "type": "string"
@@ -1754,13 +1778,19 @@
     "github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:ServerConfig": {
       "properties": {
         "method": {
-          "type": "string"
+          "enum": [
+            "UNKNOWN",
+            "AES_128_GCM",
+            "AES_256_GCM",
+            "CHACHA20_POLY1305",
+            "NONE"
+          ]
         },
         "password": {
           "type": "string"
         },
-        "network": {
-          "type": "string"
+        "networks": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_net:NetworkList"
         },
         "packetEncoding": {
           "enum": [
