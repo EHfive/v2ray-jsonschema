@@ -118,3 +118,11 @@ func BuildRouterStrategySchemaList(r *JS.Reflector, d JS.Definitions, idKey stri
 		"random", "leastping", "leastload",
 	})
 }
+
+func BuildEnumSchema(enum []string) *JS.Schema {
+	s := &JS.Schema{}
+	for _, val := range enum {
+		s.Enum = append(s.Enum, val)
+	}
+	return s
+}

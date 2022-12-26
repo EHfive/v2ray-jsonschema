@@ -365,6 +365,9 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 	// jsonpb will marshal protobuf enum options as either strings or integers.
 	// It will unmarshal either.
 	if t.Implements(protoEnumType) {
+		if t.Kind() == reflect.Ptr {
+			t = t.Elem()
+		}
 		enumValues := reflect.New(t).Interface().(protoEnum).Descriptor().Values()
 		s := &Schema{}
 

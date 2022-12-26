@@ -718,7 +718,69 @@
             },
             "type": "object"
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "security": {
+                "const": "utls"
+              }
+            },
+            "type": "object",
+            "required": [
+              "security"
+            ]
+          },
+          "then": {
+            "properties": {
+              "securitySettings": {
+                "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_tls_utls:Config"
+              }
+            },
+            "type": "object"
+          }
         }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v5config:CustomUTLSImitate": {
+      "enum": [
+        "randomized",
+        "randomizedalpn",
+        "randomizednoalpn",
+        "firefox_auto",
+        "firefox_55",
+        "firefox_56",
+        "firefox_63",
+        "firefox_65",
+        "firefox_99",
+        "firefox_102",
+        "firefox_105",
+        "chrome_auto",
+        "chrome_58",
+        "chrome_62",
+        "chrome_70",
+        "chrome_72",
+        "chrome_83",
+        "chrome_87",
+        "chrome_96",
+        "chrome_100",
+        "chrome_102",
+        "ios_auto",
+        "ios_11_1",
+        "ios_12_1",
+        "ios_13",
+        "ios_14",
+        "android_11_okhttp",
+        "edge_auto",
+        "edge_85",
+        "edge_106",
+        "safari_auto",
+        "safari_16_0",
+        "360_auto",
+        "360_7_5",
+        "360_11_0",
+        "qq_auto",
+        "qq_11_1"
       ]
     },
     "github:v2fly_v2ray-core_v5_app_browserforwarder:Config": {
@@ -801,28 +863,55 @@
           "items": {
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_dns:HostMapping"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Static domain-ip mapping in DNS server."
+        },
+        "fakeDns": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_dns_fakedns:FakeDnsPoolMulti",
+          "description": "Global fakedns object."
         },
         "tag": {
           "type": "string",
           "description": "Tag is the inbound tag of DNS client."
         },
+        "domainMatcher": {
+          "type": "string",
+          "description": "Domain matcher to use"
+        },
         "disableCache": {
           "type": "boolean",
-          "description": "DisableCache disables DNS cache"
+          "description": "DisableCache disables DNS cache\nDeprecated. Use cache_strategy.\n\nDeprecated: Do not use."
+        },
+        "disableFallback": {
+          "type": "boolean",
+          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Do not use."
+        },
+        "disableFallbackIfMatch": {
+          "type": "boolean",
+          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Do not use."
         },
         "queryStrategy": {
           "enum": [
             "USE_IP",
             "USE_IP4",
             "USE_IP6"
-          ]
+          ],
+          "description": "Default query strategy (IPv4, IPv6, or both) for each name server."
         },
-        "disableFallback": {
-          "type": "boolean"
+        "cacheStrategy": {
+          "enum": [
+            "CacheEnabled",
+            "CacheDisabled"
+          ],
+          "description": "Default cache strategy for each name server."
         },
-        "disableFallbackIfMatch": {
-          "type": "boolean"
+        "fallbackStrategy": {
+          "enum": [
+            "Enabled",
+            "Disabled",
+            "DisabledIfAnyMatch"
+          ],
+          "description": "Default fallback strategy for each name server."
         }
       },
       "type": "object"
@@ -835,8 +924,8 @@
         "clientIp": {
           "type": "string"
         },
-        "skipFallback": {
-          "type": "boolean"
+        "tag": {
+          "type": "string"
         },
         "prioritizedDomain": {
           "items": {
@@ -855,6 +944,33 @@
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_dns:SimplifiedNameServer_OriginalRule"
           },
           "type": "array"
+        },
+        "fakeDns": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_dns_fakedns:FakeDnsPoolMulti"
+        },
+        "skipFallback": {
+          "type": "boolean",
+          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Do not use."
+        },
+        "queryStrategy": {
+          "enum": [
+            "USE_IP",
+            "USE_IP4",
+            "USE_IP6"
+          ]
+        },
+        "cacheStrategy": {
+          "enum": [
+            "CacheEnabled",
+            "CacheDisabled"
+          ]
+        },
+        "fallbackStrategy": {
+          "enum": [
+            "Enabled",
+            "Disabled",
+            "DisabledIfAnyMatch"
+          ]
         }
       },
       "type": "object"
@@ -985,7 +1101,7 @@
       "properties": {
         "destination": {
           "type": "string",
-          "description": "destination url, need 204 for success return\ndefault http://www.google.com/gen_204"
+          "description": "destination url, need 204 for success return\ndefault https://connectivitycheck.gstatic.com/generate_204"
         },
         "connectivity": {
           "type": "string",
@@ -2190,6 +2306,20 @@
         "verifyClientCertificate": {
           "type": "boolean",
           "description": "If true, the client is required to present a certificate."
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_tls_utls:Config": {
+      "properties": {
+        "tlsConfig": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_tls:Config"
+        },
+        "imitate": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v5config:CustomUTLSImitate"
+        },
+        "noSni": {
+          "type": "boolean"
         }
       },
       "type": "object"

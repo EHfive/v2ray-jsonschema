@@ -16,8 +16,11 @@ import (
 )
 
 type CustomFakeDNSConfig struct{}
+type CustomFakeDNSConfigExtend struct{}
 type CustomHostAddress struct{}
 type CustomNameServerConfig struct{}
+
+// TODO: enums for queryStrategy, cacheStrategy and fallbackStrategy in NameServerConfig and DNSConfig
 
 type CustomInboundConfig struct{}
 type CustomOutboundConfig struct{}
@@ -30,6 +33,11 @@ type CustomHTTPRemoteConfigUser struct{}
 type CustomSocksRemoteConfigUser struct{}
 type CustomVLessInOutboundConfigUser struct{}
 type CustomVMessInOutboundConfigUser struct{}
+type CustomRouterDomainStrategy struct{}
+type CustomFreedomDomainStrategy struct{}
+type CustomDNSQueryStrategy struct{}
+type CustomDNSCacheStrategy struct{}
+type CustomDNSFallbackStrategy struct{}
 
 type CustomRouterRule struct {
 	rule.RouterRule
@@ -55,7 +63,14 @@ func (CustomOutboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 }
 
 func (CustomFakeDNSConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	return C.BuildSingleOrArraySchema(r, d, C.ToElemType((*v4.FakeDNSPoolElementConfig)(nil)))
+	return C.BuildSingleOrArraySchema(r, d, C.ToElemType((*dns.FakeDNSPoolElementConfig)(nil)))
+}
+
+func (CustomFakeDNSConfigExtend) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	return &JS.Schema{OneOf: []*JS.Schema{
+		{Type: "boolean"},
+		C.SchemaFromPtr(r, d, (*CustomFakeDNSConfig)(nil)),
+	}}
 }
 
 func (CustomHostAddress) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
@@ -132,6 +147,47 @@ func (CustomVMessInOutboundConfigUser) JSONSchema2(r *JS.Reflector, d JS.Definit
 	return buildUserWithAccountSchema(r, d, (*v4.VMessAccount)(nil))
 }
 
+func (CustomRouterDomainStrategy) JSONSchema() *JS.Schema {
+	return C.BuildEnumSchema([]string{
+		"AsIs",
+		"AlwaysIP",
+		"IPIfNonMatch",
+		"IPOnDemand",
+	})
+}
+
+func (CustomFreedomDomainStrategy) JSONSchema() *JS.Schema {
+	return C.BuildEnumSchema([]string{
+		"AsIs",
+		"UseIP",
+		"UseIPv4",
+		"UseIPv6",
+	})
+}
+
+func (CustomDNSQueryStrategy) JSONSchema() *JS.Schema {
+	return C.BuildEnumSchema([]string{
+		"UseIP",
+		"UseIPv4",
+		"UseIPv6",
+	})
+}
+
+func (CustomDNSCacheStrategy) JSONSchema() *JS.Schema {
+	return C.BuildEnumSchema([]string{
+		"Enabled",
+		"Disabled",
+	})
+}
+
+func (CustomDNSFallbackStrategy) JSONSchema() *JS.Schema {
+	return C.BuildEnumSchema([]string{
+		"Enabled",
+		"Disabled",
+		"DisabledIfAnyMatch",
+	})
+}
+
 var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
 	{(*v4.TCPConfig)(nil), "HeaderConfig", (*CustomTCPHeaderConfig)(nil)},
 	{(*v4.KCPConfig)(nil), "HeaderConfig", (*CustomKCPHeaderConfig)(nil)},
@@ -147,13 +203,23 @@ var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
 	{(*v4.VMessOutboundTarget)(nil), "Users", (*CustomVMessInOutboundConfigUser)(nil)},
 	{(*router.RouterConfig)(nil), "RuleList", (*CustomRouterRule)(nil)},
 	{(*router.RouterRulesConfig)(nil), "RuleList", (*CustomRouterRule)(nil)},
+	{(*router.RouterConfig)(nil), "DomainStrategy", (*CustomRouterDomainStrategy)(nil)},
+	{(*router.RouterRulesConfig)(nil), "DomainStrategy", (*CustomRouterDomainStrategy)(nil)},
+	{(*v4.FreedomConfig)(nil), "DomainStrategy", (*CustomFreedomDomainStrategy)(nil)},
+	{(*dns.DNSConfig)(nil), "QueryStrategy", (*CustomDNSQueryStrategy)(nil)},
+	{(*dns.DNSConfig)(nil), "CacheStrategy", (*CustomDNSCacheStrategy)(nil)},
+	{(*dns.DNSConfig)(nil), "FallbackStrategy", (*CustomDNSFallbackStrategy)(nil)},
+	{(*dns.NameServerConfig)(nil), "QueryStrategy", (*CustomDNSQueryStrategy)(nil)},
+	{(*dns.NameServerConfig)(nil), "CacheStrategy", (*CustomDNSCacheStrategy)(nil)},
+	{(*dns.NameServerConfig)(nil), "FallbackStrategy", (*CustomDNSFallbackStrategy)(nil)},
 }
 
 var replaceTypePairs []C.ReplaceTypePair = []C.ReplaceTypePair{
 	{(*v4.InboundDetourConfig)(nil), (*CustomInboundConfig)(nil)},
 	{(*v4.OutboundDetourConfig)(nil), (*CustomOutboundConfig)(nil)},
 	{(*v4.MultiObservatoryItem)(nil), (*CustomMultiObservatoryItem)(nil)},
-	{(*v4.FakeDNSConfig)(nil), (*CustomFakeDNSConfig)(nil)},
+	{(*dns.FakeDNSConfig)(nil), (*CustomFakeDNSConfig)(nil)},
+	{(*dns.FakeDNSConfigExtend)(nil), (*CustomFakeDNSConfigExtend)(nil)},
 	{(*router.StrategyConfig)(nil), (*CustomStrategyConfig)(nil)},
 	{(*dns.HostAddress)(nil), (*CustomHostAddress)(nil)},
 	{(*dns.NameServerConfig)(nil), (*CustomNameServerConfig)(nil)},

@@ -9,6 +9,7 @@ import (
 
 	"github.com/v2fly/v2ray-core/v5/app/router"
 	"github.com/v2fly/v2ray-core/v5/infra/conf/v5cfg"
+	"github.com/v2fly/v2ray-core/v5/transport/internet/tls/utls"
 
 	_ "github.com/v2fly/v2ray-core/v5/main/distro/all"
 )
@@ -18,6 +19,7 @@ type CustomOutboundConfig struct{}
 type CustomStreamSettings struct{}
 type CustomServices struct{}
 type CustomBalancingRule struct{}
+type CustomUTLSImitate struct{}
 
 func (CustomInboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	return buildInOutBoundSchema(r, d, C.ToElemType((*v5cfg.InboundConfig)(nil)), "inbound", []string{
@@ -56,7 +58,7 @@ func (CustomStreamSettings) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 		"grpc", "kcp", "tcp", "quic", "ws",
 	})
 	securitySList := C.BuildConditionalSchemaList(r, d, "security", "securitySettings", "security", []string{
-		"tls",
+		"tls", "utls",
 	})
 
 	var allOf []*JS.Schema
@@ -101,6 +103,50 @@ func (CustomBalancingRule) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sc
 	return &JS.Schema{AllOf: allOf}
 }
 
+var imitateList = []string{
+	"randomized",
+	"randomizedalpn",
+	"randomizednoalpn",
+	"firefox_auto",
+	"firefox_55",
+	"firefox_56",
+	"firefox_63",
+	"firefox_65",
+	"firefox_99",
+	"firefox_102",
+	"firefox_105",
+	"chrome_auto",
+	"chrome_58",
+	"chrome_62",
+	"chrome_70",
+	"chrome_72",
+	"chrome_83",
+	"chrome_87",
+	"chrome_96",
+	"chrome_100",
+	"chrome_102",
+	"ios_auto",
+	"ios_11_1",
+	"ios_12_1",
+	"ios_13",
+	"ios_14",
+	"android_11_okhttp",
+	"edge_auto",
+	"edge_85",
+	"edge_106",
+	"safari_auto",
+	"safari_16_0",
+	"360_auto",
+	"360_7_5",
+	"360_11_0",
+	"qq_auto",
+	"qq_11_1",
+}
+
+func (CustomUTLSImitate) JSONSchema() *JS.Schema {
+	return C.BuildEnumSchema(imitateList)
+}
+
 var replaceTypePairs []C.ReplaceTypePair = []C.ReplaceTypePair{
 	{(*v5cfg.InboundConfig)(nil), (*CustomInboundConfig)(nil)},
 	{(*v5cfg.OutboundConfig)(nil), (*CustomOutboundConfig)(nil)},
@@ -123,6 +169,11 @@ func alterField(t reflect.Type, f *reflect.StructField) bool {
 			return false
 		case "Services":
 			f.Type = C.ToElemType((*CustomServices)(nil))
+			return false
+		}
+	case C.ToElemType((*utls.Config)(nil)):
+		if f.Name == "Imitate" {
+			f.Type = C.ToElemType((*CustomUTLSImitate)(nil))
 			return false
 		}
 	}
