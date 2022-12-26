@@ -7,6 +7,7 @@ import (
 	"github.com/iancoleman/orderedmap"
 	JS "github.com/invopop/jsonschema"
 
+	"github.com/v2fly/v2ray-core/v5/app/dns"
 	"github.com/v2fly/v2ray-core/v5/app/router"
 	"github.com/v2fly/v2ray-core/v5/infra/conf/v5cfg"
 	"github.com/v2fly/v2ray-core/v5/transport/internet/tls/utls"
@@ -147,6 +148,12 @@ func (CustomUTLSImitate) JSONSchema() *JS.Schema {
 	return C.BuildEnumSchema(imitateList)
 }
 
+var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
+	{(*utls.Config)(nil), "Imitate", (*CustomUTLSImitate)(nil)},
+	{(*dns.SimplifiedConfig)(nil), "DomainMatcher", (*C.CustomDNSDomainMatcher)(nil)},
+	{(*router.SimplifiedRoutingRule)(nil), "DomainMatcher", (*C.CustomDNSDomainMatcher)(nil)},
+}
+
 var replaceTypePairs []C.ReplaceTypePair = []C.ReplaceTypePair{
 	{(*v5cfg.InboundConfig)(nil), (*CustomInboundConfig)(nil)},
 	{(*v5cfg.OutboundConfig)(nil), (*CustomOutboundConfig)(nil)},
@@ -171,11 +178,11 @@ func alterField(t reflect.Type, f *reflect.StructField) bool {
 			f.Type = C.ToElemType((*CustomServices)(nil))
 			return false
 		}
-	case C.ToElemType((*utls.Config)(nil)):
-		if f.Name == "Imitate" {
-			f.Type = C.ToElemType((*CustomUTLSImitate)(nil))
-			return false
-		}
+	}
+
+	if newF, ok := C.ReplaceFieldTypeElemByPairs(t, *f, replaceFieldTypePairs); ok {
+		f.Type = newF
+		return false
 	}
 
 	if newF, ok := C.ReplaceTypeElemByPairs(f.Type, replaceTypePairs); ok {

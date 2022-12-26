@@ -3,6 +3,12 @@
   "$id": "https://github.com/v2fly/v2ray-core/v5/infra/conf/v4/github:v2fly_v2ray-core_v5_infra_conf_v4:-config",
   "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v4:Config",
   "$defs": {
+    "github:EHfive_v2ray-jsonschema_common:CustomDNSDomainMatcher": {
+      "enum": [
+        "linear",
+        "mph"
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomNumber": {
       "type": "integer"
     },
@@ -588,7 +594,7 @@
           "type": "string"
         },
         "domainMatcher": {
-          "type": "string"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomDNSDomainMatcher"
         },
         "domain": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
@@ -976,7 +982,7 @@
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFakeDNSConfig"
         },
         "domainMatcher": {
-          "type": "string"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomDNSDomainMatcher"
         },
         "clientIp": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
@@ -1131,7 +1137,7 @@
           "type": "array"
         },
         "domainMatcher": {
-          "type": "string"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomDNSDomainMatcher"
         }
       },
       "type": "object"

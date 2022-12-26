@@ -14,6 +14,7 @@ type CustomStringList struct{}
 type CustomPortRange struct{}
 type CustomNumber struct{}
 type CustomNetworkList struct{}
+type CustomDNSDomainMatcher struct{}
 
 func (CustomPbAny) JSONSchema() *JS.Schema {
 	props := orderedmap.New()
@@ -50,4 +51,8 @@ func (CustomNetworkList) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sche
 		{Type: "string"},
 		s,
 	}}
+}
+
+func (CustomDNSDomainMatcher) JSONSchema() *JS.Schema {
+	return BuildEnumSchema([]string{"linear", "mph"})
 }

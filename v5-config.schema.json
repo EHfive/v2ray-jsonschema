@@ -3,6 +3,12 @@
   "$id": "https://github.com/v2fly/v2ray-core/v5/infra/conf/v5cfg/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:-root-config",
   "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:RootConfig",
   "$defs": {
+    "github:EHfive_v2ray-jsonschema_common:CustomDNSDomainMatcher": {
+      "enum": [
+        "linear",
+        "mph"
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomNetworkList": {
       "oneOf": [
         {
@@ -875,7 +881,7 @@
           "description": "Tag is the inbound tag of DNS client."
         },
         "domainMatcher": {
-          "type": "string",
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomDNSDomainMatcher",
           "description": "Domain matcher to use"
         },
         "disableCache": {
@@ -1393,7 +1399,7 @@
           "type": "string"
         },
         "domainMatcher": {
-          "type": "string"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomDNSDomainMatcher"
         },
         "geoDomain": {
           "items": {

@@ -212,6 +212,9 @@ var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
 	{(*dns.NameServerConfig)(nil), "QueryStrategy", (*CustomDNSQueryStrategy)(nil)},
 	{(*dns.NameServerConfig)(nil), "CacheStrategy", (*CustomDNSCacheStrategy)(nil)},
 	{(*dns.NameServerConfig)(nil), "FallbackStrategy", (*CustomDNSFallbackStrategy)(nil)},
+	{(*dns.DNSConfig)(nil), "DomainMatcher", (*C.CustomDNSDomainMatcher)(nil)},
+	{(*router.RouterConfig)(nil), "DomainMatcher", (*C.CustomDNSDomainMatcher)(nil)},
+	{(*rule.RouterRule)(nil), "DomainMatcher", (*C.CustomDNSDomainMatcher)(nil)},
 }
 
 var replaceTypePairs []C.ReplaceTypePair = []C.ReplaceTypePair{
