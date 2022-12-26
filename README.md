@@ -10,8 +10,9 @@ Build JSON schemas of [V2Ray](https://github.com/v2fly/v2ray-core) v4, v5 json c
 
 Set property `$schema` to URL of corresponding format of JSON schema in V2Ray config file. You will then get auto suggestions from some IDEs while editing V2Ray config file.
 
-VSCode is known to support this syntax, [see also](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings).
+VSCode is known to support this syntax, see [doc](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings).
 
+#### Schemas
 - jsonv4 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v4-config.schema.json
 - jsonv5 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json
 
@@ -20,7 +21,7 @@ VSCode is known to support this syntax, [see also](https://code.visualstudio.com
 
 ```json
 {
-  "$schema": "https://cdn.jsdelivr.net/gh/EHfive/v2ray-jsonschema/v5-config.schema.json",
+  "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
   "inbounds": [
     {
       "protocol": "socks",
@@ -40,7 +41,7 @@ VSCode is known to support this syntax, [see also](https://code.visualstudio.com
 
 ### Caution
 
-Due to custom JSON, protobuf (un)marshaling used on config types, not all types are getting mapped to JSON schemas in a general mapping process. Although some most important ones have been manually re-mapped, there are still some unmapped types left in generated schemas.
+Due to custom JSON, protobuf (un)marshaling used on config types, not all types are getting mapped to JSON schemas in a generic mapping process. Although some most important ones have been manually re-mapped, there are still some unmapped types left in generated schemas.
 
 ## jsonschema
 

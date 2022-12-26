@@ -10,8 +10,9 @@
 
 在V2Ray配置文件中将 `$schema` 设为指向对应配置格式的 JSON schema 的 URL，一些 IDE 可以通过此 schema 为你提供编辑提示
 
-VSCode 支持此格式, [见此文档](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings)
+VSCode 支持此格式, 见此[文档](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings)
 
+#### Schemas
 - jsonv4 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v4-config.schema.json
 - jsonv5 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json
 
@@ -20,7 +21,7 @@ VSCode 支持此格式, [见此文档](https://code.visualstudio.com/docs/langua
 
 ```json
 {
-  "$schema": "https://cdn.jsdelivr.net/gh/EHfive/v2ray-jsonschema/v5-config.schema.json",
+  "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
   "inbounds": [
     {
       "protocol": "socks",
