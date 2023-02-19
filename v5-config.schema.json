@@ -815,43 +815,6 @@
       },
       "type": "object"
     },
-    "github:v2fly_v2ray-core_v5_app_dns:HostMapping": {
-      "properties": {
-        "type": {
-          "enum": [
-            "Full",
-            "Subdomain",
-            "Keyword",
-            "Regex"
-          ]
-        },
-        "domain": {
-          "type": "string"
-        },
-        "ip": {
-          "items": {
-            "oneOf": [
-              {
-                "type": "string",
-                "contentEncoding": "base64"
-              },
-              {
-                "items": {
-                  "type": "integer"
-                },
-                "type": "array"
-              }
-            ]
-          },
-          "type": "array"
-        },
-        "proxiedDomain": {
-          "type": "string",
-          "description": "ProxiedDomain indicates the mapped domain has the same IP address on this\ndomain. V2Ray will use this domain for IP queries."
-        }
-      },
-      "type": "object"
-    },
     "github:v2fly_v2ray-core_v5_app_dns:SimplifiedConfig": {
       "properties": {
         "nameServer": {
@@ -867,7 +830,7 @@
         },
         "staticHosts": {
           "items": {
-            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_dns:HostMapping"
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_dns:SimplifiedHostMapping"
           },
           "type": "array",
           "description": "Static domain-ip mapping in DNS server."
@@ -918,6 +881,32 @@
             "DisabledIfAnyMatch"
           ],
           "description": "Default fallback strategy for each name server."
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_app_dns:SimplifiedHostMapping": {
+      "properties": {
+        "type": {
+          "enum": [
+            "Full",
+            "Subdomain",
+            "Keyword",
+            "Regex"
+          ]
+        },
+        "domain": {
+          "type": "string"
+        },
+        "ip": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "proxiedDomain": {
+          "type": "string",
+          "description": "ProxiedDomain indicates the mapped domain has the same IP address on this\ndomain. V2Ray will use this domain for IP queries."
         }
       },
       "type": "object"
@@ -1208,6 +1197,9 @@
       "properties": {
         "stats": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_policy:SystemPolicy_Stats"
+        },
+        "overrideAccessLogDest": {
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -1973,6 +1965,12 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "packetEncoding": {
+          "enum": [
+            "None",
+            "Packet"
+          ]
         }
       },
       "type": "object"
@@ -2326,6 +2324,13 @@
         },
         "noSni": {
           "type": "boolean"
+        },
+        "forceAlpn": {
+          "enum": [
+            "TRANSPORT_PREFERENCE_TAKE_PRIORITY",
+            "NO_ALPN",
+            "UTLS_PRESET"
+          ]
         }
       },
       "type": "object"

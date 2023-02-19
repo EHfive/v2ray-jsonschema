@@ -1658,6 +1658,9 @@
         },
         "mux": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig"
+        },
+        "domainStrategy": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFreedomDomainStrategy"
         }
       },
       "type": "object"
@@ -1937,6 +1940,9 @@
           "type": "boolean"
         },
         "statsOutboundDownlink": {
+          "type": "boolean"
+        },
+        "overrideAccessLogDest": {
           "type": "boolean"
         }
       },

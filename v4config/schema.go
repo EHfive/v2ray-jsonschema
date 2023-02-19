@@ -206,6 +206,7 @@ var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
 	{(*router.RouterConfig)(nil), "DomainStrategy", (*CustomRouterDomainStrategy)(nil)},
 	{(*router.RouterRulesConfig)(nil), "DomainStrategy", (*CustomRouterDomainStrategy)(nil)},
 	{(*v4.FreedomConfig)(nil), "DomainStrategy", (*CustomFreedomDomainStrategy)(nil)},
+	{(*v4.OutboundDetourConfig)(nil), "DomainStrategy", (*CustomFreedomDomainStrategy)(nil)},
 	{(*dns.DNSConfig)(nil), "QueryStrategy", (*CustomDNSQueryStrategy)(nil)},
 	{(*dns.DNSConfig)(nil), "CacheStrategy", (*CustomDNSCacheStrategy)(nil)},
 	{(*dns.DNSConfig)(nil), "FallbackStrategy", (*CustomDNSFallbackStrategy)(nil)},
