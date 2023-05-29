@@ -1055,7 +1055,7 @@
           },
           "type": "array"
         },
-        "expectIps": {
+        "expectIPs": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
         },
         "fakeDns": {

@@ -1848,6 +1848,9 @@
         },
         "port": {
           "type": "integer"
+        },
+        "h1SkipWaitForReply": {
+          "type": "boolean"
         }
       },
       "type": "object"
