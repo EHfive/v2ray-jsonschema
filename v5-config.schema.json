@@ -707,6 +707,27 @@
         {
           "if": {
             "properties": {
+              "transport": {
+                "const": "meek"
+              }
+            },
+            "type": "object",
+            "required": [
+              "transport"
+            ]
+          },
+          "then": {
+            "properties": {
+              "transportSettings": {
+                "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_request_stereotype_meek:Config"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
               "security": {
                 "const": "tls"
               }
@@ -2196,6 +2217,14 @@
         },
         "header": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPbAny"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_request_stereotype_meek:Config": {
+      "properties": {
+        "url": {
+          "type": "string"
         }
       },
       "type": "object"
