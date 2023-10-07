@@ -15,6 +15,8 @@ type CustomPortRange struct{}
 type CustomNumber struct{}
 type CustomNetworkList struct{}
 type CustomDNSDomainMatcher struct{}
+type CustomRouterProtocol struct{}
+type CustomRouterProtocolList struct{}
 
 func (CustomPbAny) JSONSchema() *JS.Schema {
 	props := orderedmap.New()
@@ -55,4 +57,21 @@ func (CustomNetworkList) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sche
 
 func (CustomDNSDomainMatcher) JSONSchema() *JS.Schema {
 	return BuildEnumSchema([]string{"linear", "mph"})
+}
+
+func (CustomRouterProtocol) JSONSchema() *JS.Schema {
+	return BuildEnumSchema([]string{
+		// from <https://pkg.go.dev/github.com/v2fly/v2ray-core/v5/common/session#Content>
+		"tls", "quic", "dns",
+		// from <https://pkg.go.dev/github.com/v2fly/v2ray-core/v5/app/dispatcher#SniffResult>
+		"fakedns", "fakedns+others", "bittorrent", "http1", // "quic", "tls",
+	})
+}
+
+func (CustomRouterProtocolList) JSONSchema() *JS.Schema {
+	s := CustomRouterProtocol{}.JSONSchema()
+	return &JS.Schema{OneOf: []*JS.Schema{
+		s,
+		{Type: "array", Items: s},
+	}}
 }

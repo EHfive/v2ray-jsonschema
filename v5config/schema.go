@@ -151,6 +151,7 @@ func (CustomUTLSImitate) JSONSchema() *JS.Schema {
 var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
 	{(*utls.Config)(nil), "Imitate", (*CustomUTLSImitate)(nil)},
 	{(*dns.SimplifiedConfig)(nil), "DomainMatcher", (*C.CustomDNSDomainMatcher)(nil)},
+	{(*router.SimplifiedRoutingRule)(nil), "Protocol", (*C.CustomRouterProtocol)(nil)},
 	{(*router.SimplifiedRoutingRule)(nil), "DomainMatcher", (*C.CustomDNSDomainMatcher)(nil)},
 }
 

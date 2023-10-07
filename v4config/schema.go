@@ -41,17 +41,17 @@ type CustomDNSFallbackStrategy struct{}
 
 type CustomRouterRule struct {
 	rule.RouterRule
-	Domain     *cfgcommon.StringList  `json:"domain"`
-	Domains    *cfgcommon.StringList  `json:"domains"`
-	IP         *cfgcommon.StringList  `json:"ip"`
-	Port       *cfgcommon.PortList    `json:"port"`
-	Network    *cfgcommon.NetworkList `json:"network"`
-	SourceIP   *cfgcommon.StringList  `json:"source"`
-	SourcePort *cfgcommon.PortList    `json:"sourcePort"`
-	User       *cfgcommon.StringList  `json:"user"`
-	InboundTag *cfgcommon.StringList  `json:"inboundTag"`
-	Protocols  *cfgcommon.StringList  `json:"protocol"`
-	Attributes string                 `json:"attrs"`
+	Domain     *cfgcommon.StringList       `json:"domain"`
+	Domains    *cfgcommon.StringList       `json:"domains"`
+	IP         *cfgcommon.StringList       `json:"ip"`
+	Port       *cfgcommon.PortList         `json:"port"`
+	Network    *cfgcommon.NetworkList      `json:"network"`
+	SourceIP   *cfgcommon.StringList       `json:"source"`
+	SourcePort *cfgcommon.PortList         `json:"sourcePort"`
+	User       *cfgcommon.StringList       `json:"user"`
+	InboundTag *cfgcommon.StringList       `json:"inboundTag"`
+	Protocols  *C.CustomRouterProtocolList `json:"protocol"`
+	Attributes string                      `json:"attrs"`
 }
 
 func (CustomInboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {

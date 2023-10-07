@@ -51,6 +51,17 @@
         }
       ]
     },
+    "github:EHfive_v2ray-jsonschema_common:CustomRouterProtocol": {
+      "enum": [
+        "tls",
+        "quic",
+        "dns",
+        "fakedns",
+        "fakedns+others",
+        "bittorrent",
+        "http1"
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomString": {
       "type": "string"
     },
@@ -1404,7 +1415,7 @@
         },
         "protocol": {
           "items": {
-            "type": "string"
+            "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomRouterProtocol"
           },
           "type": "array"
         },
@@ -1888,6 +1899,20 @@
       },
       "type": "object"
     },
+    "github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:CipherTypeWrapper": {
+      "properties": {
+        "value": {
+          "enum": [
+            "UNKNOWN",
+            "AES_128_GCM",
+            "AES_256_GCM",
+            "CHACHA20_POLY1305",
+            "NONE"
+          ]
+        }
+      },
+      "type": "object"
+    },
     "github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:ClientConfig": {
       "properties": {
         "address": {
@@ -1897,13 +1922,7 @@
           "type": "integer"
         },
         "method": {
-          "enum": [
-            "UNKNOWN",
-            "AES_128_GCM",
-            "AES_256_GCM",
-            "CHACHA20_POLY1305",
-            "NONE"
-          ]
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:CipherTypeWrapper"
         },
         "password": {
           "type": "string"
@@ -1917,13 +1936,7 @@
     "github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:ServerConfig": {
       "properties": {
         "method": {
-          "enum": [
-            "UNKNOWN",
-            "AES_128_GCM",
-            "AES_256_GCM",
-            "CHACHA20_POLY1305",
-            "NONE"
-          ]
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:CipherTypeWrapper"
         },
         "password": {
           "type": "string"

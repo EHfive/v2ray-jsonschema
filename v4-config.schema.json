@@ -22,6 +22,35 @@
         }
       ]
     },
+    "github:EHfive_v2ray-jsonschema_common:CustomRouterProtocolList": {
+      "oneOf": [
+        {
+          "enum": [
+            "tls",
+            "quic",
+            "dns",
+            "fakedns",
+            "fakedns+others",
+            "bittorrent",
+            "http1"
+          ]
+        },
+        {
+          "items": {
+            "enum": [
+              "tls",
+              "quic",
+              "dns",
+              "fakedns",
+              "fakedns+others",
+              "bittorrent",
+              "http1"
+            ]
+          },
+          "type": "array"
+        }
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomString": {
       "type": "string"
     },
@@ -624,7 +653,7 @@
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
         },
         "protocol": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomRouterProtocolList"
         },
         "attrs": {
           "type": "string"
