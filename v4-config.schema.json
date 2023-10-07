@@ -9,9 +9,6 @@
         "mph"
       ]
     },
-    "github:EHfive_v2ray-jsonschema_common:CustomNumber": {
-      "type": "integer"
-    },
     "github:EHfive_v2ray-jsonschema_common:CustomPortRange": {
       "oneOf": [
         {
@@ -118,6 +115,16 @@
         },
         {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFakeDNSConfig"
+        }
+      ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomFallbackDest": {
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
         }
       ]
     },
@@ -2041,7 +2048,7 @@
           "type": "string"
         },
         "dest": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomNumber"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFallbackDest"
         },
         "xver": {
           "type": "integer"
@@ -2138,7 +2145,7 @@
           "type": "string"
         },
         "dest": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomNumber"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFallbackDest"
         },
         "xver": {
           "type": "integer"

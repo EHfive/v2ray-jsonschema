@@ -12,7 +12,6 @@ type CustomPbAny struct{}
 type CustomString struct{}
 type CustomStringList struct{}
 type CustomPortRange struct{}
-type CustomNumber struct{}
 type CustomNetworkList struct{}
 type CustomDNSDomainMatcher struct{}
 type CustomRouterProtocol struct{}
@@ -41,10 +40,6 @@ func (CustomPortRange) JSONSchema() *JS.Schema {
 		{Type: "integer"},
 		{Type: "string"},
 	}}
-}
-
-func (CustomNumber) JSONSchema() *JS.Schema {
-	return &JS.Schema{Type: "integer"}
 }
 
 func (CustomNetworkList) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {

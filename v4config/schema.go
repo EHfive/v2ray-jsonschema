@@ -38,6 +38,7 @@ type CustomFreedomDomainStrategy struct{}
 type CustomDNSQueryStrategy struct{}
 type CustomDNSCacheStrategy struct{}
 type CustomDNSFallbackStrategy struct{}
+type CustomFallbackDest struct{}
 
 type CustomRouterRule struct {
 	rule.RouterRule
@@ -188,6 +189,14 @@ func (CustomDNSFallbackStrategy) JSONSchema() *JS.Schema {
 	})
 }
 
+func (CustomFallbackDest) JSONSchema() *JS.Schema {
+	// port number, host:port or unix path, or "serve-ws-none"
+	return &JS.Schema{OneOf: []*JS.Schema{
+		{Type: "integer"},
+		{Type: "string"},
+	}}
+}
+
 var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
 	{(*v4.TCPConfig)(nil), "HeaderConfig", (*CustomTCPHeaderConfig)(nil)},
 	{(*v4.KCPConfig)(nil), "HeaderConfig", (*CustomKCPHeaderConfig)(nil)},
@@ -195,8 +204,8 @@ var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
 	{(*v4.BlackholeConfig)(nil), "Response", (*CustomBlackholeConfigResponse)(nil)},
 	{(*v4.HTTPRemoteConfig)(nil), "Users", (*CustomHTTPRemoteConfigUser)(nil)},
 	{(*v4.SocksRemoteConfig)(nil), "Users", (*CustomSocksRemoteConfigUser)(nil)},
-	{(*v4.VLessInboundFallback)(nil), "Dest", (*C.CustomNumber)(nil)},
-	{(*v4.TrojanInboundFallback)(nil), "Dest", (*C.CustomNumber)(nil)},
+	{(*v4.VLessInboundFallback)(nil), "Dest", (*CustomFallbackDest)(nil)},
+	{(*v4.TrojanInboundFallback)(nil), "Dest", (*CustomFallbackDest)(nil)},
 	{(*v4.VLessInboundConfig)(nil), "Clients", (*CustomVLessInOutboundConfigUser)(nil)},
 	{(*v4.VLessOutboundVnext)(nil), "Users", (*CustomVLessInOutboundConfigUser)(nil)},
 	{(*v4.VMessInboundConfig)(nil), "Users", (*CustomVMessInOutboundConfigUser)(nil)},
