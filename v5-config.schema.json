@@ -601,6 +601,9 @@
         },
         "stats": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_stats:Config"
+        },
+        "tun": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_tun:Config"
         }
       },
       "type": "object"
@@ -731,6 +734,48 @@
             "properties": {
               "transportSettings": {
                 "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_request_stereotype_meek:Config"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "transport": {
+                "const": "domainsocket"
+              }
+            },
+            "type": "object",
+            "required": [
+              "transport"
+            ]
+          },
+          "then": {
+            "properties": {
+              "transportSettings": {
+                "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_domainsocket:Config"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "transport": {
+                "const": "h2"
+              }
+            },
+            "type": "object",
+            "required": [
+              "transport"
+            ]
+          },
+          "then": {
+            "properties": {
+              "transportSettings": {
+                "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_http:Config"
               }
             },
             "type": "object"
@@ -1652,6 +1697,50 @@
       "properties": {},
       "type": "object"
     },
+    "github:v2fly_v2ray-core_v5_app_tun:Config": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "mtu": {
+          "type": "integer"
+        },
+        "userLevel": {
+          "type": "integer"
+        },
+        "packetEncoding": {
+          "enum": [
+            "None",
+            "Packet"
+          ]
+        },
+        "tag": {
+          "type": "string"
+        },
+        "ips": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router_routercommon:CIDR"
+          },
+          "type": "array"
+        },
+        "routes": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router_routercommon:CIDR"
+          },
+          "type": "array"
+        },
+        "enablePromiscuousMode": {
+          "type": "boolean"
+        },
+        "enableSpoofing": {
+          "type": "boolean"
+        },
+        "socketSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet:SocketConfig"
+        }
+      },
+      "type": "object"
+    },
     "github:v2fly_v2ray-core_v5_common_net:Endpoint": {
       "properties": {
         "network": {
@@ -2114,6 +2203,94 @@
       },
       "type": "object"
     },
+    "github:v2fly_v2ray-core_v5_transport_internet:SocketConfig": {
+      "properties": {
+        "mark": {
+          "type": "integer",
+          "description": "Mark of the connection. If non-zero, the value will be set to SO_MARK."
+        },
+        "tfo": {
+          "enum": [
+            "AsIs",
+            "Enable",
+            "Disable"
+          ],
+          "description": "TFO is the state of TFO settings."
+        },
+        "tproxy": {
+          "enum": [
+            "Off",
+            "TProxy",
+            "Redirect"
+          ],
+          "description": "TProxy is for enabling TProxy socket option."
+        },
+        "receiveOriginalDestAddress": {
+          "type": "boolean",
+          "description": "ReceiveOriginalDestAddress is for enabling IP_RECVORIGDSTADDR socket\noption. This option is for UDP only."
+        },
+        "bindAddress": {
+          "oneOf": [
+            {
+              "type": "string",
+              "contentEncoding": "base64"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "bindPort": {
+          "type": "integer"
+        },
+        "acceptProxyProtocol": {
+          "type": "boolean"
+        },
+        "tcpKeepAliveInterval": {
+          "type": "integer"
+        },
+        "tfoQueueLength": {
+          "type": "integer"
+        },
+        "tcpKeepAliveIdle": {
+          "type": "integer"
+        },
+        "bindToDevice": {
+          "type": "string"
+        },
+        "rxBufSize": {
+          "type": "integer"
+        },
+        "txBufSize": {
+          "type": "integer"
+        },
+        "forceBufSize": {
+          "type": "boolean"
+        }
+      },
+      "type": "object",
+      "description": "SocketConfig is options to be applied on network sockets."
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_domainsocket:Config": {
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Path of the domain socket. This overrides the IP/Port parameter from\nupstream caller."
+        },
+        "abstract": {
+          "type": "boolean",
+          "description": "Abstract specifies whether to use abstract namespace or not.\nTraditionally Unix domain socket is file system based. Abstract domain\nsocket can be used without acquiring file lock."
+        },
+        "padding": {
+          "type": "boolean",
+          "description": "Some apps, eg. haproxy, use the full length of sockaddr_un.sun_path to\nconnect(2) or bind(2) when using abstract UDS."
+        }
+      },
+      "type": "object"
+    },
     "github:v2fly_v2ray-core_v5_transport_internet_grpc:Config": {
       "properties": {
         "host": {
@@ -2121,6 +2298,45 @@
         },
         "serviceName": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_headers_http:Header": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "\"Accept\", \"Cookie\", etc"
+        },
+        "value": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Each entry must be valid in one piece. Random entry will be chosen if\nmultiple entries present."
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_http:Config": {
+      "properties": {
+        "host": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "path": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "header": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_headers_http:Header"
+          },
+          "type": "array"
         }
       },
       "type": "object"

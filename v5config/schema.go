@@ -56,7 +56,7 @@ func (CustomStreamSettings) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 		"transport", "transportSettings", "security", "securitySettings",
 	})
 	transportSList := C.BuildConditionalSchemaList(r, d, "transport", "transportSettings", "transport", []string{
-		"grpc", "kcp", "tcp", "quic", "ws", "meek",
+		"grpc", "kcp", "tcp", "quic", "ws", "meek", "domainsocket", "h2",
 	})
 	securitySList := C.BuildConditionalSchemaList(r, d, "security", "securitySettings", "security", []string{
 		"tls", "utls",
@@ -70,10 +70,12 @@ func (CustomStreamSettings) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 }
 
 func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
+	// "log", "dns" and "router" are in top-level
 	services := []string{
 		"backgroundObservatory",
 		"browser",
 		"burstObservatory",
+		// "multiobservatory",
 		"commander",
 		"fakeDns",
 		"fakeDnsMulti",
@@ -82,6 +84,7 @@ func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema 
 		"restfulapi",
 		"reverse",
 		"stats",
+		"tun",
 	}
 
 	props := orderedmap.New()
