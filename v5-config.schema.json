@@ -784,6 +784,27 @@
         {
           "if": {
             "properties": {
+              "transport": {
+                "const": "httpupgrade"
+              }
+            },
+            "type": "object",
+            "required": [
+              "transport"
+            ]
+          },
+          "then": {
+            "properties": {
+              "transportSettings": {
+                "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_httpupgrade:Config"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
               "security": {
                 "const": "tls"
               }
@@ -926,15 +947,15 @@
         },
         "disableCache": {
           "type": "boolean",
-          "description": "DisableCache disables DNS cache\nDeprecated. Use cache_strategy.\n\nDeprecated: Do not use."
+          "description": "DisableCache disables DNS cache\nDeprecated. Use cache_strategy.\n\nDeprecated: Marked as deprecated in app/dns/config.proto."
         },
         "disableFallback": {
           "type": "boolean",
-          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Do not use."
+          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Marked as deprecated in app/dns/config.proto."
         },
         "disableFallbackIfMatch": {
           "type": "boolean",
-          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Do not use."
+          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Marked as deprecated in app/dns/config.proto."
         },
         "queryStrategy": {
           "enum": [
@@ -1022,7 +1043,7 @@
         },
         "skipFallback": {
           "type": "boolean",
-          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Do not use."
+          "description": "Deprecated. Use fallback_strategy.\n\nDeprecated: Marked as deprecated in app/dns/config.proto."
         },
         "queryStrategy": {
           "enum": [
@@ -2337,6 +2358,17 @@
             "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet_headers_http:Header"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_transport_internet_httpupgrade:Config": {
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
         }
       },
       "type": "object"

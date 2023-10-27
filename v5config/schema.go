@@ -56,7 +56,15 @@ func (CustomStreamSettings) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 		"transport", "transportSettings", "security", "securitySettings",
 	})
 	transportSList := C.BuildConditionalSchemaList(r, d, "transport", "transportSettings", "transport", []string{
-		"grpc", "kcp", "tcp", "quic", "ws", "meek", "domainsocket", "h2",
+		"grpc",
+		"kcp",
+		"tcp",
+		"quic",
+		"ws",
+		"meek",
+		"domainsocket",
+		"h2",
+		"httpupgrade",
 	})
 	securitySList := C.BuildConditionalSchemaList(r, d, "security", "securitySettings", "security", []string{
 		"tls", "utls",
