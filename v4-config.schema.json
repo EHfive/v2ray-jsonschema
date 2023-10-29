@@ -1578,6 +1578,9 @@
     },
     "github:v2fly_v2ray-core_v5_infra_conf_v4:InboundDetourConfig": {
       "properties": {
+        "protocol": {
+          "type": "string"
+        },
         "port": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPortRange"
         },
@@ -1680,6 +1683,9 @@
     },
     "github:v2fly_v2ray-core_v5_infra_conf_v4:OutboundDetourConfig": {
       "properties": {
+        "protocol": {
+          "type": "string"
+        },
         "sendThrough": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
         },

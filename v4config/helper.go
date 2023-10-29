@@ -47,7 +47,7 @@ func buildInOutBoundSchema(r *JS.Reflector, d JS.Definitions, t reflect.Type, co
 	idKey, configKey := "protocol", "settings"
 
 	var schemas []*JS.Schema
-	basicS := C.BuildBasicObjectSchema(r, d, t, []string{idKey, configKey})
+	basicS := C.BuildBasicObjectSchema(r, d, t, []string{configKey})
 	schemas = append(schemas, basicS)
 
 	for _, pair := range configPairs {
