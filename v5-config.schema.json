@@ -1319,6 +1319,26 @@
       },
       "type": "object"
     },
+    "github:v2fly_v2ray-core_v5_app_proxyman:SniffingConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether or not to enable content sniffing on an inbound connection."
+        },
+        "destinationOverride": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Override target destination if sniff'ed protocol is in the given list.\nSupported values are \"http\", \"tls\", \"fakedns\"."
+        },
+        "metadataOnly": {
+          "type": "boolean",
+          "description": "Whether should only try to sniff metadata without waiting for client input.\nCan be used to support SMTP like protocol where server send the first message."
+        }
+      },
+      "type": "object"
+    },
     "github:v2fly_v2ray-core_v5_app_restfulapi:Config": {
       "properties": {
         "listenAddr": {
@@ -1758,6 +1778,9 @@
         },
         "socketSettings": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_transport_internet:SocketConfig"
+        },
+        "sniffingSettings": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_proxyman:SniffingConfig"
         }
       },
       "type": "object"
