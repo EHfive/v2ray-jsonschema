@@ -34,7 +34,6 @@ type CustomSocksRemoteConfigUser struct{}
 type CustomVLessInOutboundConfigUser struct{}
 type CustomVMessInOutboundConfigUser struct{}
 type CustomRouterDomainStrategy struct{}
-type CustomFreedomDomainStrategy struct{}
 type CustomDNSQueryStrategy struct{}
 type CustomDNSCacheStrategy struct{}
 type CustomDNSFallbackStrategy struct{}
@@ -157,15 +156,6 @@ func (CustomRouterDomainStrategy) JSONSchema() *JS.Schema {
 	})
 }
 
-func (CustomFreedomDomainStrategy) JSONSchema() *JS.Schema {
-	return C.BuildEnumSchema([]string{
-		"AsIs",
-		"UseIP",
-		"UseIPv4",
-		"UseIPv6",
-	})
-}
-
 func (CustomDNSQueryStrategy) JSONSchema() *JS.Schema {
 	return C.BuildEnumSchema([]string{
 		"UseIP",
@@ -214,8 +204,8 @@ var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
 	{(*router.RouterRulesConfig)(nil), "RuleList", (*CustomRouterRule)(nil)},
 	{(*router.RouterConfig)(nil), "DomainStrategy", (*CustomRouterDomainStrategy)(nil)},
 	{(*router.RouterRulesConfig)(nil), "DomainStrategy", (*CustomRouterDomainStrategy)(nil)},
-	{(*v4.FreedomConfig)(nil), "DomainStrategy", (*CustomFreedomDomainStrategy)(nil)},
-	{(*v4.OutboundDetourConfig)(nil), "DomainStrategy", (*CustomFreedomDomainStrategy)(nil)},
+	{(*v4.FreedomConfig)(nil), "DomainStrategy", (*C.CustomFreedomDomainStrategy)(nil)},
+	{(*v4.OutboundDetourConfig)(nil), "DomainStrategy", (*C.CustomFreedomDomainStrategy)(nil)},
 	{(*dns.DNSConfig)(nil), "QueryStrategy", (*CustomDNSQueryStrategy)(nil)},
 	{(*dns.DNSConfig)(nil), "CacheStrategy", (*CustomDNSCacheStrategy)(nil)},
 	{(*dns.DNSConfig)(nil), "FallbackStrategy", (*CustomDNSFallbackStrategy)(nil)},

@@ -16,6 +16,7 @@ type CustomNetworkList struct{}
 type CustomDNSDomainMatcher struct{}
 type CustomRouterProtocol struct{}
 type CustomRouterProtocolList struct{}
+type CustomFreedomDomainStrategy struct{}
 
 func (CustomPbAny) JSONSchema() *JS.Schema {
 	props := orderedmap.New()
@@ -69,4 +70,13 @@ func (CustomRouterProtocolList) JSONSchema() *JS.Schema {
 		s,
 		{Type: "array", Items: s},
 	}}
+}
+
+func (CustomFreedomDomainStrategy) JSONSchema() *JS.Schema {
+	return BuildEnumSchema([]string{
+		"AsIs",
+		"UseIP",
+		"UseIPv4",
+		"UseIPv6",
+	})
 }

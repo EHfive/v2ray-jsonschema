@@ -9,6 +9,14 @@
         "mph"
       ]
     },
+    "github:EHfive_v2ray-jsonschema_common:CustomFreedomDomainStrategy": {
+      "enum": [
+        "AsIs",
+        "UseIP",
+        "UseIPv4",
+        "UseIPv6"
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomPortRange": {
       "oneOf": [
         {
@@ -126,14 +134,6 @@
         {
           "type": "string"
         }
-      ]
-    },
-    "github:EHfive_v2ray-jsonschema_v4config:CustomFreedomDomainStrategy": {
-      "enum": [
-        "AsIs",
-        "UseIP",
-        "UseIPv4",
-        "UseIPv6"
       ]
     },
     "github:EHfive_v2ray-jsonschema_v4config:CustomHTTPRemoteConfigUser": {
@@ -1459,7 +1459,7 @@
     "github:v2fly_v2ray-core_v5_infra_conf_v4:FreedomConfig": {
       "properties": {
         "domainStrategy": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFreedomDomainStrategy"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomFreedomDomainStrategy"
         },
         "timeout": {
           "type": "integer"
@@ -1702,7 +1702,7 @@
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig"
         },
         "domainStrategy": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFreedomDomainStrategy"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomFreedomDomainStrategy"
         }
       },
       "type": "object"

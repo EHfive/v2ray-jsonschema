@@ -43,6 +43,7 @@ func (CustomOutboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 		"http",
 		"loopback",
 		"shadowsocks",
+		"shadowsocks2022",
 		"socks",
 		"trojan",
 		"vless",
@@ -160,6 +161,7 @@ func (CustomUTLSImitate) JSONSchema() *JS.Schema {
 }
 
 var replaceFieldTypePairs []C.ReplaceFieldTypePair = []C.ReplaceFieldTypePair{
+	{(*v5cfg.OutboundConfig)(nil), "DomainStrategy", (*C.CustomFreedomDomainStrategy)(nil)},
 	{(*utls.Config)(nil), "Imitate", (*CustomUTLSImitate)(nil)},
 	{(*dns.SimplifiedConfig)(nil), "DomainMatcher", (*C.CustomDNSDomainMatcher)(nil)},
 	{(*router.SimplifiedRoutingRule)(nil), "Protocol", (*C.CustomRouterProtocol)(nil)},

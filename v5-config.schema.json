@@ -9,6 +9,14 @@
         "mph"
       ]
     },
+    "github:EHfive_v2ray-jsonschema_common:CustomFreedomDomainStrategy": {
+      "enum": [
+        "AsIs",
+        "UseIP",
+        "UseIPv4",
+        "UseIPv6"
+      ]
+    },
     "github:EHfive_v2ray-jsonschema_common:CustomNetworkList": {
       "oneOf": [
         {
@@ -449,6 +457,27 @@
             "properties": {
               "settings": {
                 "$ref": "#/$defs/github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:ClientConfig"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "protocol": {
+                "const": "shadowsocks2022"
+              }
+            },
+            "type": "object",
+            "required": [
+              "protocol"
+            ]
+          },
+          "then": {
+            "properties": {
+              "settings": {
+                "$ref": "#/$defs/github:v2fly_v2ray-core_v5_proxy_shadowsocks2022:ClientConfig"
               }
             },
             "type": "object"
@@ -1938,6 +1967,9 @@
         },
         "mux": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig"
+        },
+        "domainStrategy": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomFreedomDomainStrategy"
         }
       },
       "type": "object"
@@ -2034,6 +2066,51 @@
       "properties": {
         "inboundTag": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_proxy_shadowsocks2022:ClientConfig": {
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "psk": {
+          "oneOf": [
+            {
+              "type": "string",
+              "contentEncoding": "base64"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "ipsk": {
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "contentEncoding": "base64"
+              },
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
         }
       },
       "type": "object"
