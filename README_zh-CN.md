@@ -19,6 +19,8 @@ VSCode 支持此格式, 见此[文档](https://code.visualstudio.com/docs/langua
 - jsonv4 schema (jsDelivr CDN): https://cdn.jsdelivr.net/gh/EHfive/v2ray-jsonschema/v4-config.schema.json
 - jsonv5 schema (jsDelivr CDN): https://cdn.jsdelivr.net/gh/EHfive/v2ray-jsonschema/v5-config.schema.json
 
+#### 配置示例
+
 ```json
 {
   "$schema": "https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json",
@@ -36,5 +38,7 @@ VSCode 支持此格式, 见此[文档](https://code.visualstudio.com/docs/langua
   ]
 }
 ```
+
+#### 补全演示
 
 ![autosuggestion-demo](./doc/code-suggestion-demo.gif)

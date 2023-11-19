@@ -1,3 +1,10 @@
+# Looking for co-maintainer
+
+I have switched to use other proxy solutions so there is lesser motivation for me to maintain this generator and schemas.
+Please contact me (via [Issues](https://github.com/EHfive/v2ray-jsonschema/issues) or email) if you have enough motivation to keep this project running. There is no requirement on understanding the code of this project but some basic understanding of Go and JSON schema are hoped. I would then add documentations on how the generator works and maintenance instructions.
+
+---
+
 # V2Ray JSON Schema
 
 Build JSON schemas of [V2Ray](https://github.com/v2fly/v2ray-core) v4, v5 json config format through Go type reflection system.
@@ -13,11 +20,14 @@ Set property `$schema` to URL of corresponding format of JSON schema in V2Ray co
 VSCode is known to support this syntax, see [doc](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings).
 
 #### Schemas
+
 - jsonv4 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v4-config.schema.json
 - jsonv5 schema (GitHub): https://github.com/EHfive/v2ray-jsonschema/raw/main/v5-config.schema.json
 
 - jsonv4 schema (jsDelivr CDN): https://cdn.jsdelivr.net/gh/EHfive/v2ray-jsonschema/v4-config.schema.json
 - jsonv5 schema (jsDelivr CDN): https://cdn.jsdelivr.net/gh/EHfive/v2ray-jsonschema/v5-config.schema.json
+
+#### Example Config
 
 ```json
 {
@@ -36,6 +46,8 @@ VSCode is known to support this syntax, see [doc](https://code.visualstudio.com/
   ]
 }
 ```
+
+#### Autosuggestion Demo
 
 ![autosuggestion-demo](./doc/code-suggestion-demo.gif)
 
