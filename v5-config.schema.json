@@ -633,6 +633,9 @@
         },
         "tun": {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_tun:Config"
+        },
+        "subscription": {
+          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_subscription:Config"
         }
       },
       "type": "object"
@@ -1765,6 +1768,55 @@
     },
     "github:v2fly_v2ray-core_v5_app_stats:Config": {
       "properties": {},
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_app_subscription:Config": {
+      "properties": {
+        "imports": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_subscription:ImportSource"
+          },
+          "type": "array"
+        },
+        "nonnativeConverterOverlay": {
+          "oneOf": [
+            {
+              "type": "string",
+              "contentEncoding": "base64"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "nonnativeConverterOverlayFile": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "description": "Config is the settings for Subscription Manager."
+    },
+    "github:v2fly_v2ray-core_v5_app_subscription:ImportSource": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "tagPrefix": {
+          "type": "string"
+        },
+        "importUsingTag": {
+          "type": "string"
+        },
+        "defaultExpireSeconds": {
+          "type": "integer"
+        }
+      },
       "type": "object"
     },
     "github:v2fly_v2ray-core_v5_app_tun:Config": {

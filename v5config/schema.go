@@ -97,6 +97,7 @@ func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema 
 		"reverse",
 		"stats",
 		"tun",
+		"subscription",
 	}
 
 	props := orderedmap.New()
