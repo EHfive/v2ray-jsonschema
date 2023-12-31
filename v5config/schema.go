@@ -10,6 +10,8 @@ import (
 	"github.com/v2fly/v2ray-core/v5/app/dns"
 	"github.com/v2fly/v2ray-core/v5/app/router"
 	"github.com/v2fly/v2ray-core/v5/infra/conf/v5cfg"
+	ss "github.com/v2fly/v2ray-core/v5/proxy/shadowsocks"
+	ss_simpl "github.com/v2fly/v2ray-core/v5/proxy/shadowsocks/simplified"
 	"github.com/v2fly/v2ray-core/v5/transport/internet/tls/utls"
 
 	_ "github.com/v2fly/v2ray-core/v5/main/distro/all"
@@ -21,6 +23,7 @@ type CustomStreamSettings struct{}
 type CustomServices struct{}
 type CustomBalancingRule struct{}
 type CustomUTLSImitate struct{}
+type CustomCipherTypeWrapper struct{}
 
 func (CustomInboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	return buildInOutBoundSchema(r, d, C.ToElemType((*v5cfg.InboundConfig)(nil)), "inbound", []string{
@@ -116,6 +119,10 @@ func (CustomBalancingRule) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sc
 	return &JS.Schema{AllOf: allOf}
 }
 
+func (CustomCipherTypeWrapper) JSONSchema() *JS.Schema {
+	return &JS.Schema{Type: "string"}
+}
+
 var imitateList = []string{
 	"randomized",
 	"randomizedalpn",
@@ -173,6 +180,7 @@ var replaceTypePairs []C.ReplaceTypePair = []C.ReplaceTypePair{
 	{(*v5cfg.OutboundConfig)(nil), (*CustomOutboundConfig)(nil)},
 	{(*v5cfg.StreamConfig)(nil), (*CustomStreamSettings)(nil)},
 	{(*router.BalancingRule)(nil), (*CustomBalancingRule)(nil)},
+	{(*ss_simpl.CipherTypeWrapper)(nil), (*ss.CipherType)(nil)},
 }
 
 func alterField(t reflect.Type, f *reflect.StructField) bool {

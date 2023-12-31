@@ -2115,20 +2115,6 @@
       },
       "type": "object"
     },
-    "github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:CipherTypeWrapper": {
-      "properties": {
-        "value": {
-          "enum": [
-            "UNKNOWN",
-            "AES_128_GCM",
-            "AES_256_GCM",
-            "CHACHA20_POLY1305",
-            "NONE"
-          ]
-        }
-      },
-      "type": "object"
-    },
     "github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:ClientConfig": {
       "properties": {
         "address": {
@@ -2138,7 +2124,13 @@
           "type": "integer"
         },
         "method": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:CipherTypeWrapper"
+          "enum": [
+            "UNKNOWN",
+            "AES_128_GCM",
+            "AES_256_GCM",
+            "CHACHA20_POLY1305",
+            "NONE"
+          ]
         },
         "password": {
           "type": "string"
@@ -2152,7 +2144,13 @@
     "github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:ServerConfig": {
       "properties": {
         "method": {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_proxy_shadowsocks_simplified:CipherTypeWrapper"
+          "enum": [
+            "UNKNOWN",
+            "AES_128_GCM",
+            "AES_256_GCM",
+            "CHACHA20_POLY1305",
+            "NONE"
+          ]
         },
         "password": {
           "type": "string"
