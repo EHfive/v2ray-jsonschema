@@ -76,7 +76,7 @@ func (CustomFreedomDomainStrategy) JSONSchema() *JS.Schema {
 	return BuildEnumSchema([]string{
 		"AsIs",
 		"UseIP",
-		"UseIPv4",
-		"UseIPv6",
+		"UseIP4",
+		"UseIP6",
 	})
 }

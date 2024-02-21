@@ -13,8 +13,8 @@
       "enum": [
         "AsIs",
         "UseIP",
-        "UseIPv4",
-        "UseIPv6"
+        "UseIP4",
+        "UseIP6"
       ]
     },
     "github:EHfive_v2ray-jsonschema_common:CustomPortRange": {
@@ -99,8 +99,8 @@
     "github:EHfive_v2ray-jsonschema_v4config:CustomDNSQueryStrategy": {
       "enum": [
         "UseIP",
-        "UseIPv4",
-        "UseIPv6"
+        "UseIP4",
+        "UseIP6"
       ]
     },
     "github:EHfive_v2ray-jsonschema_v4config:CustomFakeDNSConfig": {

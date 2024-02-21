@@ -159,8 +159,8 @@ func (CustomRouterDomainStrategy) JSONSchema() *JS.Schema {
 func (CustomDNSQueryStrategy) JSONSchema() *JS.Schema {
 	return C.BuildEnumSchema([]string{
 		"UseIP",
-		"UseIPv4",
-		"UseIPv6",
+		"UseIP4",
+		"UseIP6",
 	})
 }
 
