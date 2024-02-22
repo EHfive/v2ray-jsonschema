@@ -640,9 +640,9 @@ func (r *Reflector) reflectFieldPbOneOf(st *Schema, definitions Definitions, t r
 	fields := oneof.Fields()
 	for i := 0; i < fields.Len(); i++ {
 		field := fields.Get(i)
-		name := string(field.Name())
-		if r.KeyNamer2 != nil {
-			name = r.KeyNamer2(t, name, string(field.JSONName()), "")
+		name := field.JSONName()
+		if name == "" {
+			name = string(field.Name())
 		}
 		fieldType := reflect.TypeOf(field.Default().Interface())
 		st.Properties.Set(name, r.refOrReflectTypeToSchema(definitions, fieldType))
@@ -1077,8 +1077,6 @@ func (r *Reflector) reflectFieldName(t reflect.Type, f reflect.StructField) (str
 
 	if r.KeyNamer2 != nil {
 		name = r.KeyNamer2(t, name, pbJsonName, jsonTagsList[0])
-	} else if pbJsonName != "" {
-		name = pbJsonName
 	} else if r.KeyNamer != nil {
 		name = r.KeyNamer(name)
 	}
