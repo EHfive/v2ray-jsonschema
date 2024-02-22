@@ -217,6 +217,9 @@ type Reflector struct {
 	// If a json or yaml tag is present, KeyNamer will receive the tag's name as an argument, not the original key name.
 	KeyNamer func(string) string
 
+	// Select the field name
+	KeyNamer2 func(t reflect.Type, name string, pbJsonName string, jsonName string) string
+
 	CustomFields func(reflect.Type) []reflect.StructField
 
 	// AdditionalFields allows adding structfields for a given type
@@ -557,7 +560,7 @@ func (r *Reflector) reflectStructFields(st *Schema, definitions Definitions, t r
 			return
 		}
 
-		name, shouldEmbed, required, nullable := r.reflectFieldName(f)
+		name, shouldEmbed, required, nullable := r.reflectFieldName(t, f)
 		// if anonymous and exported type should be processed recursively
 		// current type should inherit properties of anonymous one
 		if name == "" {
@@ -637,7 +640,10 @@ func (r *Reflector) reflectFieldPbOneOf(st *Schema, definitions Definitions, t r
 	fields := oneof.Fields()
 	for i := 0; i < fields.Len(); i++ {
 		field := fields.Get(i)
-		name := r.KeyNamer(string(field.Name()))
+		name := string(field.Name())
+		if r.KeyNamer2 != nil {
+			name = r.KeyNamer2(t, name, string(field.JSONName()), "")
+		}
 		fieldType := reflect.TypeOf(field.Default().Interface())
 		st.Properties.Set(name, r.refOrReflectTypeToSchema(definitions, fieldType))
 		st.OneOf = append(st.OneOf, &Schema{
@@ -991,7 +997,30 @@ func ignoredByJSONSchemaTags(tags []string) bool {
 	return tags[0] == "-"
 }
 
-func (r *Reflector) reflectFieldName(f reflect.StructField) (string, bool, bool, bool) {
+func (r *Reflector) reflectFieldName(t reflect.Type, f reflect.StructField) (string, bool, bool, bool) {
+	pbJsonName := ""
+	pbTag, pbExist := f.Tag.Lookup("protobuf")
+	if pbExist {
+		v, ok := reflect.New(t).Interface().(protoreflect.ProtoMessage)
+		if ok {
+			tags := strings.Split(pbTag, ",")
+			fieldName := ""
+			for i := range tags {
+				if name, found := strings.CutPrefix(tags[i], "name="); found {
+					fieldName = name
+					break
+				}
+			}
+			if fieldName != "" {
+				field := v.ProtoReflect().Descriptor().Fields().ByName(protoreflect.Name(fieldName))
+				if field != nil {
+					pbJsonName = field.JSONName()
+				}
+			}
+		}
+
+	}
+
 	jsonTags, exist := f.Tag.Lookup("json")
 	yamlTags, yamlExist := f.Tag.Lookup("yaml")
 	if !exist || r.PreferYAMLSchema {
@@ -1046,7 +1075,11 @@ func (r *Reflector) reflectFieldName(f reflect.StructField) (string, bool, bool,
 		embed = true
 	}
 
-	if r.KeyNamer != nil {
+	if r.KeyNamer2 != nil {
+		name = r.KeyNamer2(t, name, pbJsonName, jsonTagsList[0])
+	} else if pbJsonName != "" {
+		name = pbJsonName
+	} else if r.KeyNamer != nil {
 		name = r.KeyNamer(name)
 	}
 
