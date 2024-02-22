@@ -20,6 +20,20 @@ type CustomFakeDNSConfigExtend struct{}
 type CustomHostAddress struct{}
 type CustomNameServerConfig struct{}
 
+type CustomNameServerConfigInner struct {
+	Address          *cfgcommon.Address      `json:"address"`
+	ClientIP         *cfgcommon.Address      `json:"clientIp"`
+	Port             uint16                  `json:"port"`
+	Tag              string                  `json:"tag"`
+	QueryStrategy    string                  `json:"queryStrategy"`
+	CacheStrategy    string                  `json:"cacheStrategy"`
+	FallbackStrategy string                  `json:"fallbackStrategy"`
+	SkipFallback     bool                    `json:"skipFallback"`
+	Domains          []string                `json:"domains"`
+	ExpectIPs        cfgcommon.StringList    `json:"expectIps"`
+	FakeDNS          dns.FakeDNSConfigExtend `json:"fakedns"`
+}
+
 // TODO: enums for queryStrategy, cacheStrategy and fallbackStrategy in NameServerConfig and DNSConfig
 
 type CustomInboundConfig struct{}
@@ -80,7 +94,7 @@ func (CustomHostAddress) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Sche
 func (CustomNameServerConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
 	return &JS.Schema{OneOf: []*JS.Schema{
 		{Type: "string"},
-		C.SchemaFromPtr(r, d, (*dns.NameServerConfig)(nil)),
+		C.SchemaFromPtr(r, d, (*CustomNameServerConfigInner)(nil)),
 	}}
 }
 
@@ -255,8 +269,16 @@ func customFields(t reflect.Type) []reflect.StructField {
 	return fields
 }
 
+func keyNamer(t reflect.Type, name string, jsonPbName string, jsonName string) string {
+	if jsonPbName != "" {
+		return jsonPbName
+	}
+	return name
+}
+
 func JSONSchema(r JS.Reflector) *JS.Schema {
 	r.CustomFields = customFields
+	r.KeyNamer2 = keyNamer
 	t := C.ToElemType((*v4.Config)(nil))
 	s := r.ReflectFromType(t)
 	return C.DefaultPostFixSchema(s, "jsonv4")

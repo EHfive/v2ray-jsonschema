@@ -7,7 +7,6 @@ import (
 
 	"github.com/iancoleman/orderedmap"
 	JS "github.com/invopop/jsonschema"
-	"github.com/stoewer/go-strcase"
 
 	"github.com/v2fly/v2ray-core/v5/common/net"
 	"github.com/v2fly/v2ray-core/v5/infra/conf/cfgcommon"
@@ -30,7 +29,6 @@ func NewDefaultReflector() JS.Reflector {
 		Mapper: func(t reflect.Type) *JS.Schema {
 			return nil
 		},
-		KeyNamer: strcase.LowerCamelCase,
 	}
 
 	r.AddGoComments("github.com/v2fly/v2ray-core/v5", "./vendor/github.com/v2fly/v2ray-core/v5")

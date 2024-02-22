@@ -386,9 +386,50 @@
           "type": "string"
         },
         {
-          "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:NameServerConfig"
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomNameServerConfigInner"
         }
       ]
+    },
+    "github:EHfive_v2ray-jsonschema_v4config:CustomNameServerConfigInner": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "clientIp": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "queryStrategy": {
+          "type": "string"
+        },
+        "cacheStrategy": {
+          "type": "string"
+        },
+        "fallbackStrategy": {
+          "type": "string"
+        },
+        "skipFallback": {
+          "type": "boolean"
+        },
+        "domains": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "expectIps": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
+        },
+        "fakedns": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFakeDNSConfigExtend"
+        }
+      },
+      "type": "object"
     },
     "github:EHfive_v2ray-jsonschema_v4config:CustomOutboundConfig": {
       "allOf": [
@@ -823,7 +864,7 @@
           "type": "integer",
           "description": "expected nodes count to select"
         },
-        "maxRtt": {
+        "maxRTT": {
           "type": "integer",
           "description": "max acceptable rtt, filter away high delay nodes. defalut 0"
         },
@@ -1055,47 +1096,6 @@
         },
         "poolSize": {
           "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "github:v2fly_v2ray-core_v5_infra_conf_synthetic_dns:NameServerConfig": {
-      "properties": {
-        "address": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
-        },
-        "clientIp": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
-        },
-        "port": {
-          "type": "integer"
-        },
-        "tag": {
-          "type": "string"
-        },
-        "queryStrategy": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomDNSQueryStrategy"
-        },
-        "cacheStrategy": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomDNSCacheStrategy"
-        },
-        "fallbackStrategy": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomDNSFallbackStrategy"
-        },
-        "skipFallback": {
-          "type": "boolean"
-        },
-        "domains": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "expectIPs": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomStringList"
-        },
-        "fakeDns": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v4config:CustomFakeDNSConfigExtend"
         }
       },
       "type": "object"
@@ -1672,7 +1672,7 @@
           },
           "type": "array"
         },
-        "probeUrl": {
+        "probeURL": {
           "type": "string"
         },
         "probeInterval": {

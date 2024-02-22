@@ -7,7 +7,6 @@ replace github.com/invopop/jsonschema => ./jsonschema
 require (
 	github.com/iancoleman/orderedmap v0.3.0
 	github.com/invopop/jsonschema v0.12.0
-	github.com/stoewer/go-strcase v1.3.0
 	github.com/v2fly/v2ray-core/v5 v5.13.0
 	google.golang.org/protobuf v1.32.0
 )

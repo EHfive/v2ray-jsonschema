@@ -1429,13 +1429,16 @@
         "tag": {
           "type": "string"
         },
-        "outboundSelector": {
+        "outbound_selector": {
           "items": {
             "type": "string"
           },
           "type": "array"
         },
-        "fallbackTag": {
+        "strategy_settings": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPbAny"
+        },
+        "fallback_tag": {
           "type": "string"
         }
       },
@@ -1573,7 +1576,7 @@
           "type": "integer",
           "description": "expected nodes count to select"
         },
-        "maxRtt": {
+        "maxRTT": {
           "type": "integer",
           "description": "max acceptable rtt, filter away high delay nodes. defalut 0"
         },
@@ -2659,7 +2662,7 @@
     },
     "github:v2fly_v2ray-core_v5_transport_internet_tls:Certificate": {
       "properties": {
-        "certificate": {
+        "Certificate": {
           "oneOf": [
             {
               "type": "string",
@@ -2674,7 +2677,7 @@
           ],
           "description": "TLS certificate in x509 format."
         },
-        "key": {
+        "Key": {
           "oneOf": [
             {
               "type": "string",
@@ -2771,7 +2774,7 @@
         "imitate": {
           "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_v5config:CustomUTLSImitate"
         },
-        "noSni": {
+        "noSNI": {
           "type": "boolean"
         },
         "forceAlpn": {

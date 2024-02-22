@@ -228,8 +228,20 @@ func customFields(t reflect.Type) (fields []reflect.StructField) {
 	return
 }
 
+func keyNamer(t reflect.Type, name string, jsonPbName string, jsonName string) string {
+	switch t {
+	case C.ToElemType((*router.BalancingRule)(nil)):
+		return jsonName
+	}
+	if jsonPbName != "" {
+		return jsonPbName
+	}
+	return name
+}
+
 func JSONSchema(r JS.Reflector) *JS.Schema {
 	r.CustomFields = customFields
+	r.KeyNamer2 = keyNamer
 	t := C.ToElemType((*v5cfg.RootConfig)(nil))
 	s := r.ReflectFromType(t)
 	return C.DefaultPostFixSchema(s, "jsonv5")
