@@ -102,7 +102,7 @@
           },
           "then": {
             "properties": {
-              "strategySettings": {
+              "strategy_settings": {
                 "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyRandomConfig"
               }
             },
@@ -123,7 +123,7 @@
           },
           "then": {
             "properties": {
-              "strategySettings": {
+              "strategy_settings": {
                 "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyLeastPingConfig"
               }
             },
@@ -144,7 +144,7 @@
           },
           "then": {
             "properties": {
-              "strategySettings": {
+              "strategy_settings": {
                 "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router:StrategyLeastLoadConfig"
               }
             },
@@ -1434,9 +1434,6 @@
             "type": "string"
           },
           "type": "array"
-        },
-        "strategy_settings": {
-          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPbAny"
         },
         "fallback_tag": {
           "type": "string"

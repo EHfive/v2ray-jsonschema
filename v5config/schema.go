@@ -112,9 +112,9 @@ func (CustomServices) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema 
 }
 
 func (CustomBalancingRule) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.Schema {
-	allOf := C.BuildRouterStrategySchemaList(r, d, "strategy", "strategySettings")
+	allOf := C.BuildRouterStrategySchemaList(r, d, "strategy", "strategy_settings")
 	basicS := C.BuildBasicObjectSchema(r, d, C.ToElemType((*router.BalancingRule)(nil)), []string{
-		"strategy", "strategySettings",
+		"strategy", "strategy_settings",
 	})
 	allOf = append(allOf, basicS)
 	return &JS.Schema{AllOf: allOf}
