@@ -887,7 +887,14 @@
       "type": "object"
     },
     "github:v2fly_v2ray-core_v5_app_router:StrategyRandomConfig": {
-      "properties": {},
+      "properties": {
+        "observerTag": {
+          "type": "string"
+        },
+        "aliveOnly": {
+          "type": "boolean"
+        }
+      },
       "type": "object"
     },
     "github:v2fly_v2ray-core_v5_app_router:StrategyWeight": {

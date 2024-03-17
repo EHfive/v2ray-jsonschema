@@ -589,6 +589,27 @@
           }
         },
         {
+          "if": {
+            "properties": {
+              "protocol": {
+                "const": "#v2ray.core.proxy.socks.ClientConfig"
+              }
+            },
+            "type": "object",
+            "required": [
+              "protocol"
+            ]
+          },
+          "then": {
+            "properties": {
+              "settings": {
+                "$ref": "#/$defs/github:v2fly_v2ray-core_v5_proxy_socks:ClientConfig"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
           "$ref": "#/$defs/github:v2fly_v2ray-core_v5_infra_conf_v5cfg:OutboundConfig"
         }
       ],
@@ -1096,6 +1117,12 @@
             "Disabled",
             "DisabledIfAnyMatch"
           ]
+        },
+        "geoDomain": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_app_router_routercommon:GeoSite"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1596,7 +1623,14 @@
       "type": "object"
     },
     "github:v2fly_v2ray-core_v5_app_router:StrategyRandomConfig": {
-      "properties": {},
+      "properties": {
+        "observerTag": {
+          "type": "string"
+        },
+        "aliveOnly": {
+          "type": "boolean"
+        }
+      },
       "type": "object"
     },
     "github:v2fly_v2ray-core_v5_app_router:StrategyWeight": {
@@ -1902,6 +1936,39 @@
         }
       },
       "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_common_protocol:ServerEndpoint": {
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomString"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "user": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_protocol:User"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_common_protocol:User": {
+      "properties": {
+        "level": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string"
+        },
+        "account": {
+          "$ref": "#/$defs/github:EHfive_v2ray-jsonschema_common:CustomPbAny",
+          "description": "Protocol specific account information. Must be the account proto in one of\nthe proxies."
+        }
+      },
+      "type": "object",
+      "description": "User is a generic user for all procotols."
     },
     "github:v2fly_v2ray-core_v5_infra_conf_cfgcommon_muxcfg:MuxConfig": {
       "properties": {
@@ -2218,6 +2285,29 @@
         }
       },
       "type": "object"
+    },
+    "github:v2fly_v2ray-core_v5_proxy_socks:ClientConfig": {
+      "properties": {
+        "server": {
+          "items": {
+            "$ref": "#/$defs/github:v2fly_v2ray-core_v5_common_protocol:ServerEndpoint"
+          },
+          "type": "array",
+          "description": "Sever is a list of Socks server addresses."
+        },
+        "version": {
+          "enum": [
+            "SOCKS5",
+            "SOCKS4",
+            "SOCKS4A"
+          ]
+        },
+        "delayAuthWrite": {
+          "type": "boolean"
+        }
+      },
+      "type": "object",
+      "description": "ClientConfig is the protobuf config for Socks client."
     },
     "github:v2fly_v2ray-core_v5_proxy_socks_simplified:ClientConfig": {
       "properties": {
@@ -2759,6 +2849,26 @@
         "verifyClientCertificate": {
           "type": "boolean",
           "description": "If true, the client is required to present a certificate."
+        },
+        "minVersion": {
+          "enum": [
+            "Default",
+            "TLS1_0",
+            "TLS1_1",
+            "TLS1_2",
+            "TLS1_3"
+          ],
+          "description": "Minimum TLS version to support."
+        },
+        "maxVersion": {
+          "enum": [
+            "Default",
+            "TLS1_0",
+            "TLS1_1",
+            "TLS1_2",
+            "TLS1_3"
+          ],
+          "description": "Maximum TLS version to support."
         }
       },
       "type": "object"

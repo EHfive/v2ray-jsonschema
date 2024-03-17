@@ -52,6 +52,9 @@ func (CustomOutboundConfig) JSONSchema2(r *JS.Reflector, d JS.Definitions) *JS.S
 		"vless",
 		"vliteu",
 		"vmess",
+		"#v2ray.core.proxy.socks.ClientConfig",
+		// seems all config types registered with `common.RegisterConfig()` can be added in this format
+		// TODO: add other valid protocol names in this name format
 	})
 }
 
